@@ -1,0 +1,56 @@
+/* ==========================================================================
+   125-TOOLTIPS.CSS
+   Uses CSS Anchor Positioning and Popover API
+   ========================================================================== */
+
+[popover].tooltip {
+    /* 1. Reset Top Layer Defaults */
+    margin: 0;
+    inset: auto;
+    border: none;
+
+    /* 2. Dimensions & Spacing */
+    padding: var(--space-xs) var(--space-sm);
+    max-width: var(--max-width-xs);
+
+    /* 3. Styling from Semantic Tokens */
+    background-color: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-tight);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-bottom-sm);
+
+    /* 4. Interaction */
+    pointer-events: none; /* Prevents tooltip from blocking cursor interactions */
+    z-index: var(--z-index-tooltip);
+
+    /* 5. Anchor Positioning Logic */
+    position-anchor: --tooltip-target;
+    position-area: top center;
+    position-try: flip-block;
+    margin-bottom: var(--space-xs);
+}
+
+/* 6. Animations (Entry/Exit) */
+[popover].tooltip {
+    opacity: 0;
+    filter: blur(var(--blur-sm));
+    transition:
+        opacity var(--duration-fast) ease-in-out,
+        filter var(--duration-fast) ease-in-out,
+        overlay var(--duration-fast) ease-in-out allow-discrete,
+        display var(--duration-fast) ease-in-out allow-discrete;
+}
+
+[popover].tooltip:popover-open {
+    opacity: 1;
+    filter: blur(0);
+}
+
+@starting-style {
+    [popover].tooltip:popover-open {
+        opacity: 0;
+        filter: blur(var(--blur-sm));
+    }
+}

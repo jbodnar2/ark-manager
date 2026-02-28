@@ -1,0 +1,138 @@
+/* ==========================================================================
+   080-ALERTS.CSS
+   Self-contained alert component with dismissal and semantic variants
+   ========================================================================== */
+
+/* 1. Base Structure */
+.alert {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--alert-padding-vertical) var(--alert-padding-horizontal);
+    margin-bottom: var(--space-md);
+    border-radius: var(--alert-border-radius);
+    align-items: flex-start;
+
+    /* Default Colors (Neutral Fallback) */
+    background-color: var(--color-neutral-100);
+    border: var(--border-width-sm) solid var(--color-neutral-200);
+    border-left: var(--border-width-lg) solid var(--color-neutral-400);
+    color: var(--color-text-primary);
+
+    /* Animation/State Transition */
+    transition:
+        opacity var(--duration-fast) ease-out,
+        transform var(--duration-fast) ease-out;
+}
+
+.alert--dismissing {
+    opacity: 0 !important;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+.alert:last-child {
+    margin-bottom: 0;
+}
+
+/* 2. Content & Elements */
+.alert__content {
+    flex: 1;
+}
+
+.alert__title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: inherit;
+    margin: 0 0 var(--space-xs) 0;
+}
+
+.alert__message {
+    font-size: var(--alert-font-size);
+    color: inherit;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* 3. Controls & Icons */
+.alert__close {
+    background: none;
+    border: none;
+    padding: var(--space-xs);
+    cursor: pointer;
+    color: inherit;
+    border-radius: var(--radius-sm);
+    display: flex;
+    transition: background-color var(--transition-fast);
+}
+
+/* 4. Semantic Variants */
+.alert--info {
+    background-color: var(--color-info-bg);
+    border-color: transparent; /* Rely on bg and accent-left */
+    border-left-color: var(--color-info);
+    color: var(--color-info-text);
+}
+.alert--success {
+    background-color: var(--color-success-bg);
+    border-color: transparent;
+    border-left-color: var(--color-success);
+    color: var(--color-success-text);
+}
+.alert--warning {
+    background-color: var(--color-warning-bg);
+    border-color: transparent;
+    border-left-color: var(--color-warning);
+    color: var(--color-warning-text);
+}
+.alert--error {
+    background-color: var(--color-error-bg);
+    border-color: transparent;
+    border-left-color: var(--color-error);
+    color: var(--color-error-text);
+}
+
+/* 5. Unified Inheritance */
+[class*='alert--'] .alert__title,
+[class*='alert--'] .alert__message,
+[class*='alert--'] .icon,
+[class*='alert--'] .alert__close,
+[class*='alert--'] .alert__btn,
+[class*='alert--'] .alert__link {
+    color: inherit;
+}
+
+/* 6. Layout Modifiers */
+.alert--compact {
+    padding: var(--space-sm) var(--space-md);
+}
+.alert--banner {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    margin: 0;
+}
+
+/* 7. Alert Actions & States */
+.alert__actions {
+    margin-top: var(--space-md);
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.alert__btn {
+    background: transparent;
+    border: var(--border-width-sm) solid currentColor;
+    padding: calc(var(--space-xs) / 2) var(--space-sm);
+    border-radius: var(--button-border-radius);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.alert__btn:hover,
+.alert__close:hover {
+    background-color: var(--state-hover-overlay);
+}

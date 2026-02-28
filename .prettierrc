@@ -1,0 +1,15 @@
+{
+    "plugins": ["@prettier/plugin-php", "prettier-plugin-sql"],
+    "phpVersion": "8.4",
+    "singleQuote": true,
+    "braceStyle": "psr-2",
+    "tabWidth": 4,
+    "overrides": [
+        {
+            "files": ["*.json", "*.yaml", "*.yml", "*.js", "*.html"],
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
+}

@@ -1,0 +1,137 @@
+/* ==========================================================================
+   090-POPOVERS.CSS
+   Native HTML Popover API + CSS Anchor Positioning
+   Integrated with Icon System & Semantic Tokens
+   ========================================================================== */
+
+/* 1. Base Popover Structure */
+[popover] {
+    /* Reset and Layout Logic */
+    border: none;
+    margin: 0;
+    overflow: visible;
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: max-content;
+    height: fit-content;
+
+    /* Variable-Driven Styling */
+    padding: var(--popover-padding);
+    background-color: var(--popover-bg);
+    border: var(--border-width-sm) solid var(--color-border);
+    border-radius: var(--popover-border-radius);
+    box-shadow: var(--shadow-bottom-lg);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-primary);
+    max-width: var(--popover-max-width);
+}
+
+/* 2. Anchor Positioning Logic (Modern Browsers) */
+@supports (position-area: bottom center) or (inset-area: bottom center) {
+    [popover] {
+        margin: 0;
+        inset: auto;
+        position-area: bottom center;
+        inset-area: bottom center;
+        margin-top: var(--space-xs);
+        translate: 0 0;
+        position-try: flip-block, flip-inline;
+    }
+}
+
+/* 3. Semantic Variants (Using Section 5 Tokens) */
+.popover--info {
+    border-left: var(--border-width-md) solid var(--color-info);
+    background-color: var(--color-info-bg);
+}
+
+.popover--warning {
+    border-left: var(--border-width-md) solid var(--color-warning);
+    background-color: var(--color-warning-bg);
+}
+
+.popover--error {
+    border-left: var(--border-width-md) solid var(--color-error);
+    background-color: var(--color-error-bg);
+}
+
+.popover--success {
+    border-left: var(--border-width-md) solid var(--color-success);
+    background-color: var(--color-success-bg);
+}
+
+/* 4. Size Variants (Using Section 2 Layout Tokens) */
+.popover--wide {
+    max-width: var(--max-width-lg);
+    width: var(--max-width-lg);
+}
+
+.popover--narrow {
+    max-width: var(--max-width-xs);
+}
+
+/* 5. Structural Elements */
+.popover__header {
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-sm);
+    display: block;
+    padding-right: var(--space-lg); /* Account for Close Button */
+}
+
+.popover__body {
+    color: var(--color-text-secondary);
+}
+
+.popover__footer {
+    margin-top: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+}
+
+/* 6. Close Button - Integrated with Icon System */
+.popover__close {
+    position: absolute;
+    top: var(--space-xs);
+    right: var(--space-xs);
+    background: none;
+    border: none;
+    padding: var(--space-xs); /* Added for focus ring visibility */
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    display: flex;
+    border-radius: var(--radius-sm); /* Ensures focus ring is rounded */
+    transition: color var(--transition-fast);
+}
+
+.popover__close:hover {
+    color: var(--color-text-primary);
+}
+
+.popover__close .icon {
+    width: 1.25em;
+    height: 1.25em;
+}
+/* 7. Animations (Using Section 6 Animation Tokens) */
+@starting-style {
+    [popover]:popover-open {
+        opacity: 0;
+    }
+}
+
+[popover]:popover-open {
+    opacity: 1;
+    transition:
+        opacity var(--duration-fast) ease-in-out,
+        overlay var(--duration-fast) ease-in-out allow-discrete,
+        display var(--duration-fast) ease-in-out allow-discrete;
+}
+
+/* 8. Top Layer Focus Force */
+[popover]:focus-visible,
+[popover] :focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-input-focus) !important;
+    outline-offset: var(--focus-ring-offset) !important;
+}

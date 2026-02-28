@@ -1,0 +1,122 @@
+/* ==========================================================================
+   060-BUTTONS.CSS
+   Base button component with semantic variants
+   ========================================================================== */
+
+/* 1. Base Structure */
+.btn {
+    /* Layout and Sizing */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    width: fit-content;
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    /* Spacing and Typography */
+    padding: var(--button-padding-vertical) var(--button-padding-horizontal);
+    border-radius: var(--button-border-radius);
+    font-weight: var(--button-font-weight);
+    font-size: var(--button-font-size);
+    font-family: inherit;
+    line-height: var(--line-height-none);
+    text-decoration: none;
+    letter-spacing: var(--letter-spacing-wide);
+
+    /* Aesthetics */
+    cursor: pointer;
+    border: var(--border-width-sm) solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-text-primary);
+
+    /* Optimized transition */
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+/* 2. Global Button States */
+.btn:hover {
+    background-color: var(--color-bg-hover);
+    text-decoration: none;
+    color: var(--color-text-primary);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* Focus logic removed here - handled by 130-utilities.css */
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: var(--opacity-disabled);
+    pointer-events: none;
+}
+
+/* 3. Size Modifiers */
+.btn--sm {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+}
+
+.btn--lg {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+}
+
+/* 4. Semantic Variants */
+
+/* Primary: Solid high-emphasis */
+.btn--primary {
+    background-color: var(--action-bg-primary);
+    color: var(--action-text-primary);
+    border-color: var(--action-bg-primary);
+}
+
+.btn--primary:hover {
+    background-color: var(--action-bg-primary-hover);
+    border-color: var(--action-bg-primary-hover);
+    color: var(--action-text-primary);
+}
+
+/* Secondary: Outlined medium-emphasis */
+.btn--secondary {
+    background-color: var(--color-bg-surface);
+    border-color: var(--action-border-secondary);
+}
+
+.btn--secondary:hover {
+    border-color: var(--action-border-secondary-hover);
+    background-color: var(--color-bg-hover);
+}
+
+/* Ghost: Low-emphasis (Used for Tooltip/Popover triggers) */
+.btn--ghost {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.btn--ghost:hover {
+    background-color: var(--color-bg-hover);
+    border-color: transparent;
+}
+
+/* 5. Cleanup for <a> Tags */
+a.btn:visited {
+    color: inherit;
+}
+
+a.btn--primary:visited {
+    color: var(--action-text-primary);
+}
+
+/* 6. Icon Integration */
+.btn .icon {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+}

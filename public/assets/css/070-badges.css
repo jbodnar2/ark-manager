@@ -1,0 +1,139 @@
+/*  BADGES & STATUS INDICATORS */
+
+/* 1. Base Badge */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--badge-padding-vertical) var(--badge-padding-horizontal);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-font-weight);
+    border-radius: var(--badge-border-radius);
+    border: var(--border-width-sm) solid var(--badge-border-default);
+    background-color: var(--badge-bg-default);
+    color: var(--badge-text-default);
+    line-height: var(--line-height-none);
+}
+
+/* 2. Semantic Variants */
+.badge--info {
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+    border-color: var(--color-info);
+}
+.badge--success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-color: var(--color-success);
+}
+.badge--warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+    border-color: var(--color-warning);
+}
+.badge--error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+    border-color: var(--color-error);
+}
+/* 3. Sizes */
+.badge--sm {
+    padding: 0 var(--space-xs);
+    font-size: var(--font-size-xs);
+}
+
+.badge--lg {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-base);
+}
+
+/* 4. Shape & Position Modifiers */
+.badge--pill {
+    border-radius: var(--radius-full);
+}
+
+.badge--square {
+    border-radius: var(--radius-sm);
+}
+
+.badge--positioned {
+    position: absolute;
+    top: calc(var(--space-xs) * -1);
+    right: calc(var(--space-xs) * -1);
+    z-index: var(--z-index-dropdown);
+}
+
+/* 3. Status Indicators */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-sm);
+    color: var(--status-text-default);
+}
+
+.status::before {
+    content: '';
+    width: var(--badge-dot-sm);
+    height: var(--badge-dot-sm);
+    border-radius: var(--radius-full);
+    background-color: var(--status-dot-default);
+}
+
+.status--info::before {
+    background-color: var(--color-info);
+}
+.status--success::before {
+    background-color: var(--color-success);
+}
+.status--warning::before {
+    background-color: var(--color-warning);
+}
+.status--error::before {
+    background-color: var(--color-error);
+}
+
+/* ==========================================================================
+   TABLE COMPONENT INTEGRATION: BADGES & STATUS
+   ========================================================================== */
+
+/* 1. Alignment Guards */
+/* Ensures badges and status dots do not expand the row height */
+td .badge,
+td .status {
+    vertical-align: middle;
+}
+
+/* 2. Status Indicator Refinements */
+/* Centers the status dot and ensures it does not shrink in tight columns */
+.status::before {
+    flex-shrink: 0;
+}
+
+/* 3. High-Density Layouts */
+/* Tightens spacing when the .table--compact modifier is used */
+.table--compact .status {
+    gap: calc(var(--space-xs) / 2);
+    font-size: var(--font-size-xs);
+}
+
+.table--compact .badge {
+    padding: 0 var(--space-xs);
+    font-size: var(--font-size-xs);
+}
+
+/* 4. Cell-Specific Positioning */
+/* Needed for .badge--positioned to stay contained within the cell */
+.table-cell--relative {
+    position: relative;
+}
+
+/* 5. Column Width Constants */
+/* Standard widths for common data types to prevent layout jumping */
+.table-cell--status {
+    width: 120px;
+}
+
+.table-cell--badge {
+    width: 100px;
+    text-align: center;
+}

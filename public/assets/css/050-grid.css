@@ -1,0 +1,354 @@
+/* ==========================================================================
+   RESPONSIVE 12-COLUMN GRID SYSTEM
+   ========================================================================== */
+
+/* Container */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--space-md);
+    width: 100%;
+}
+
+/* Gap Modifiers */
+.grid--gap-none {
+    gap: 0;
+}
+.grid--gap-xs {
+    gap: var(--space-xs);
+}
+.grid--gap-sm {
+    gap: var(--space-sm);
+}
+.grid--gap-md {
+    gap: var(--space-md);
+}
+.grid--gap-lg {
+    gap: var(--space-lg);
+}
+.grid--gap-xl {
+    gap: var(--space-xl);
+}
+
+/* Column Spanning & Offsets - Mobile First */
+.grid__col {
+    grid-column: span 12;
+}
+
+.grid__col--1 {
+    grid-column: span 1;
+}
+.grid__col--2 {
+    grid-column: span 2;
+}
+.grid__col--3 {
+    grid-column: span 3;
+}
+.grid__col--4 {
+    grid-column: span 4;
+}
+.grid__col--5 {
+    grid-column: span 5;
+}
+.grid__col--6 {
+    grid-column: span 6;
+}
+.grid__col--7 {
+    grid-column: span 7;
+}
+.grid__col--8 {
+    grid-column: span 8;
+}
+.grid__col--9 {
+    grid-column: span 9;
+}
+.grid__col--10 {
+    grid-column: span 10;
+}
+.grid__col--11 {
+    grid-column: span 11;
+}
+.grid__col--12 {
+    grid-column: span 12;
+}
+
+.grid__col--offset-1 {
+    grid-column-start: 2;
+}
+.grid__col--offset-2 {
+    grid-column-start: 3;
+}
+.grid__col--offset-3 {
+    grid-column-start: 4;
+}
+.grid__col--offset-4 {
+    grid-column-start: 5;
+}
+.grid__col--offset-5 {
+    grid-column-start: 6;
+}
+.grid__col--offset-6 {
+    grid-column-start: 7;
+}
+.grid__col--offset-7 {
+    grid-column-start: 8;
+}
+.grid__col--offset-8 {
+    grid-column-start: 9;
+}
+.grid__col--offset-9 {
+    grid-column-start: 10;
+}
+.grid__col--offset-10 {
+    grid-column-start: 11;
+}
+.grid__col--offset-11 {
+    grid-column-start: 12;
+}
+
+/* Tablet (min-width: 768px) */
+@media (min-width: 768px) {
+    .grid__col--md-1 {
+        grid-column: span 1;
+    }
+    .grid__col--md-2 {
+        grid-column: span 2;
+    }
+    .grid__col--md-3 {
+        grid-column: span 3;
+    }
+    .grid__col--md-4 {
+        grid-column: span 4;
+    }
+    .grid__col--md-5 {
+        grid-column: span 5;
+    }
+    .grid__col--md-6 {
+        grid-column: span 6;
+    }
+    .grid__col--md-7 {
+        grid-column: span 7;
+    }
+    .grid__col--md-8 {
+        grid-column: span 8;
+    }
+    .grid__col--md-9 {
+        grid-column: span 9;
+    }
+    .grid__col--md-10 {
+        grid-column: span 10;
+    }
+    .grid__col--md-11 {
+        grid-column: span 11;
+    }
+    .grid__col--md-12 {
+        grid-column: span 12;
+    }
+
+    .grid__col--md-offset-0 {
+        grid-column-start: auto;
+    }
+    .grid__col--md-offset-1 {
+        grid-column-start: 2;
+    }
+    .grid__col--md-offset-2 {
+        grid-column-start: 3;
+    }
+    .grid__col--md-offset-3 {
+        grid-column-start: 4;
+    }
+    .grid__col--md-offset-4 {
+        grid-column-start: 5;
+    }
+    .grid__col--md-offset-5 {
+        grid-column-start: 6;
+    }
+    .grid__col--md-offset-6 {
+        grid-column-start: 7;
+    }
+    .grid__col--md-offset-7 {
+        grid-column-start: 8;
+    }
+    .grid__col--md-offset-8 {
+        grid-column-start: 9;
+    }
+    .grid__col--md-offset-9 {
+        grid-column-start: 10;
+    }
+    .grid__col--md-offset-10 {
+        grid-column-start: 11;
+    }
+    .grid__col--md-offset-11 {
+        grid-column-start: 12;
+    }
+}
+
+/* Desktop (min-width: 1024px) */
+@media (min-width: 1024px) {
+    .grid__col--lg-1 {
+        grid-column: span 1;
+    }
+    .grid__col--lg-2 {
+        grid-column: span 2;
+    }
+    .grid__col--lg-3 {
+        grid-column: span 3;
+    }
+    .grid__col--lg-4 {
+        grid-column: span 4;
+    }
+    .grid__col--lg-5 {
+        grid-column: span 5;
+    }
+    .grid__col--lg-6 {
+        grid-column: span 6;
+    }
+    .grid__col--lg-7 {
+        grid-column: span 7;
+    }
+    .grid__col--lg-8 {
+        grid-column: span 8;
+    }
+    .grid__col--lg-9 {
+        grid-column: span 9;
+    }
+    .grid__col--lg-10 {
+        grid-column: span 10;
+    }
+    .grid__col--lg-11 {
+        grid-column: span 11;
+    }
+    .grid__col--lg-12 {
+        grid-column: span 12;
+    }
+
+    .grid__col--lg-offset-0 {
+        grid-column-start: auto;
+    }
+    .grid__col--lg-offset-1 {
+        grid-column-start: 2;
+    }
+    .grid__col--lg-offset-2 {
+        grid-column-start: 3;
+    }
+    .grid__col--lg-offset-3 {
+        grid-column-start: 4;
+    }
+    .grid__col--lg-offset-4 {
+        grid-column-start: 5;
+    }
+    .grid__col--lg-offset-5 {
+        grid-column-start: 6;
+    }
+    .grid__col--lg-offset-6 {
+        grid-column-start: 7;
+    }
+    .grid__col--lg-offset-7 {
+        grid-column-start: 8;
+    }
+    .grid__col--lg-offset-8 {
+        grid-column-start: 9;
+    }
+    .grid__col--lg-offset-9 {
+        grid-column-start: 10;
+    }
+    .grid__col--lg-offset-10 {
+        grid-column-start: 11;
+    }
+    .grid__col--lg-offset-11 {
+        grid-column-start: 12;
+    }
+}
+
+/* XL (min-width: 1440px) */
+@media (min-width: 1440px) {
+    .grid__col--xl-1 {
+        grid-column: span 1;
+    }
+    .grid__col--xl-2 {
+        grid-column: span 2;
+    }
+    .grid__col--xl-3 {
+        grid-column: span 3;
+    }
+    .grid__col--xl-4 {
+        grid-column: span 4;
+    }
+    .grid__col--xl-5 {
+        grid-column: span 5;
+    }
+    .grid__col--xl-6 {
+        grid-column: span 6;
+    }
+    .grid__col--xl-7 {
+        grid-column: span 7;
+    }
+    .grid__col--xl-8 {
+        grid-column: span 8;
+    }
+    .grid__col--xl-9 {
+        grid-column: span 9;
+    }
+    .grid__col--xl-10 {
+        grid-column: span 10;
+    }
+    .grid__col--xl-11 {
+        grid-column: span 11;
+    }
+    .grid__col--xl-12 {
+        grid-column: span 12;
+    }
+
+    .grid__col--xl-offset-0 {
+        grid-column-start: auto;
+    }
+    .grid__col--xl-offset-1 {
+        grid-column-start: 2;
+    }
+    .grid__col--xl-offset-2 {
+        grid-column-start: 3;
+    }
+    .grid__col--xl-offset-3 {
+        grid-column-start: 4;
+    }
+    .grid__col--xl-offset-4 {
+        grid-column-start: 5;
+    }
+    .grid__col--xl-offset-5 {
+        grid-column-start: 6;
+    }
+    .grid__col--xl-offset-6 {
+        grid-column-start: 7;
+    }
+    .grid__col--xl-offset-7 {
+        grid-column-start: 8;
+    }
+    .grid__col--xl-offset-8 {
+        grid-column-start: 9;
+    }
+    .grid__col--xl-offset-9 {
+        grid-column-start: 10;
+    }
+    .grid__col--xl-offset-10 {
+        grid-column-start: 11;
+    }
+    .grid__col--xl-offset-11 {
+        grid-column-start: 12;
+    }
+}
+
+/* Layout Utilities */
+.grid--align-center {
+    align-items: center;
+}
+.grid--align-end {
+    align-items: end;
+}
+.grid--justify-center {
+    justify-items: center;
+}
+
+/* Auto-layout Utilities */
+.grid--auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(var(--max-width-md), 1fr));
+}

@@ -1,0 +1,40 @@
+# Server Binary
+frankenphp
+frankenphp.exe
+frankenphp-mac-arm64
+
+# Dependencies
+node_modules/
+
+# Caddy/FrankenPHP local data
+# This protects your internal CA certificates and state
+caddy_storage/
+.caddy/
+autosave.json
+
+# Logs
+# This catches the logs folder and any stray log files in the root
+logs/*
+!logs/.gitkeep
+
+# Environment/Secrets
+.env
+.env.*
+!.env.example
+
+# OS Junk
+.DS_Store
+Thumbs.db
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary SQLite files (Journals and WAL mode sidecars)
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm

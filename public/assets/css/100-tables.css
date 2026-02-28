@@ -1,0 +1,317 @@
+/* ==========================================================================
+   080-TABLES.CSS
+   ========================================================================== */
+
+.table-container {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    border: var(--border-width-sm) solid var(--color-border);
+    border-radius: var(--radius-md);
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--font-size-sm);
+    text-align: left;
+}
+
+caption {
+    padding: var(--space-sm);
+    font-weight: var(--font-weight-bold);
+    text-align: left;
+    color: var(--color-text-secondary);
+}
+
+thead th {
+    letter-spacing: var(--letter-spacing-wide);
+    background-color: var(--color-bg-surface);
+    padding: var(--space-sm) var(--space-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: inset 0 -2px 0 0 var(--color-border);
+}
+
+/* Cell Styles */
+td {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: var(--border-width-sm) solid var(--color-border);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+/* Remove the final row border to prevent double-lines with the footer */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Zebra Striping */
+tbody tr:nth-child(even) td {
+    background-color: var(--color-bg-row-alt);
+}
+
+/* Hover States */
+tbody tr:hover td {
+    background-color: var(--color-bg-hover);
+    cursor: default;
+}
+
+/* Footer Styles */
+tfoot {
+    font-weight: var(--font-weight-bold);
+    background-color: var(--color-bg-surface);
+}
+
+tfoot td {
+    border-bottom: none;
+    box-shadow: inset 0 2px 0 0 var(--color-border); /* Continuous line effect */
+}
+
+/* Alignment Utilities */
+.table-cell--numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.table-cell--center {
+    text-align: center;
+}
+
+/* Compact Modifier */
+.table--compact td,
+.table--compact th {
+    padding: var(--space-xs) var(--space-sm);
+}
+
+/* Table Action Buttons */
+.table-cell--actions {
+    width: var(--table-col-actions-width);
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Table Action Buttons */
+
+/* Icon-only buttons in tables */
+.table-cell--actions .btn--icon {
+    padding: var(--space-xs);
+    line-height: 0;
+}
+
+/* Ensure button text and icons align perfectly in table rows */
+.table-cell--actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+    border-radius: var(--radius-sm);
+    line-height: 1;
+    transition: var(--transition-fast);
+}
+
+.table-cell--actions .icon {
+    /* Override middle to ensure flex alignment takes priority */
+    vertical-align: baseline;
+}
+
+/* Info/Edit Action */
+.btn--table-edit {
+    color: var(--color-text-secondary);
+    background: transparent;
+    border-color: transparent;
+}
+
+.btn--table-edit:hover {
+    color: var(--color-info-text);
+    background-color: var(--color-info-bg);
+    border-color: var(--color-info);
+}
+
+/* Danger/Delete Action */
+.btn--table-danger {
+    color: var(--color-text-secondary);
+    background: transparent;
+    border-color: transparent;
+}
+
+.btn--table-danger:hover {
+    color: var(--color-error-text);
+    background-color: var(--color-error-bg);
+    border-color: var(--color-error);
+}
+
+/* ==========================================================================
+   BADGES & STATUS INTEGRATION
+   ========================================================================== */
+
+/* 1. Base Badge */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--badge-padding-vertical) var(--badge-padding-horizontal);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-font-weight);
+    border-radius: var(--badge-border-radius);
+    border: var(--border-width-sm) solid var(--badge-border-default);
+    background-color: var(--badge-bg-default);
+    color: var(--badge-text-default);
+    line-height: var(--line-height-none);
+}
+
+/* 2. Semantic Variants */
+.badge--info {
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+    border-color: var(--color-info);
+}
+.badge--success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-color: var(--color-success);
+}
+.badge--warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+    border-color: var(--color-warning);
+}
+.badge--error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+    border-color: var(--color-error);
+}
+
+/* 3. Sizes */
+.badge--sm {
+    padding: 0 var(--space-xs);
+    font-size: var(--font-size-xs);
+}
+
+.badge--lg {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-base);
+}
+
+/* 4. Shape & Position Modifiers */
+.badge--pill {
+    border-radius: var(--radius-full);
+}
+
+.badge--square {
+    border-radius: var(--radius-sm);
+}
+
+.badge--positioned {
+    position: absolute;
+    top: calc(var(--space-xs) * -1);
+    right: calc(var(--space-xs) * -1);
+    z-index: var(--z-index-dropdown);
+}
+
+/* 5. Status Indicators */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-sm);
+    color: var(--status-text-default);
+}
+
+.status::before {
+    content: '';
+    width: var(--badge-dot-sm);
+    height: var(--badge-dot-sm);
+    border-radius: var(--radius-full);
+    background-color: var(--status-dot-default);
+    flex-shrink: 0;
+}
+
+.status--info::before {
+    background-color: var(--color-info);
+}
+.status--success::before {
+    background-color: var(--color-success);
+}
+.status--warning::before {
+    background-color: var(--color-warning);
+}
+.status--error::before {
+    background-color: var(--color-error);
+}
+
+/* 6. Table Specific Integration */
+
+/* Vertical centering within cells */
+td .badge,
+td .status {
+    vertical-align: middle;
+}
+
+/* High-Density Layout Adjustments */
+.table--compact .status {
+    gap: calc(var(--space-xs) / 2);
+    font-size: var(--font-size-xs);
+}
+
+.table--compact .badge {
+    padding: 0 var(--space-xs);
+    font-size: var(--font-size-xs);
+}
+
+/* Positioning helper for absolute badges */
+.table-cell--relative {
+    position: relative;
+}
+
+/* Utility column widths */
+.table-cell--status {
+    width: 120px;
+}
+
+.table-cell--badge {
+    width: 100px;
+    text-align: center;
+}
+
+/* Sortable Headers */
+.table-cell--sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--transition-fast);
+}
+
+.table-cell--sortable:hover {
+    background-color: var(--color-bg-hover);
+}
+
+.table-cell--sortable .sort-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.table-cell--sortable .sort-indicator {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0.3;
+    transition: opacity var(--transition-fast);
+}
+
+.table-cell--sortable:hover .sort-indicator {
+    opacity: 0.6;
+}
+
+/* Active states for sorting */
+.table-cell--sortable[aria-sort='ascending'] .sort-indicator--up,
+.table-cell--sortable[aria-sort='descending'] .sort-indicator--down {
+    opacity: 1;
+    color: var(--action-bg-primary);
+}

@@ -1,0 +1,228 @@
+:root {
+    /* 1. Typography */
+    --font-family-sans:
+        system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
+
+    --font-size-h1: clamp(1.5rem, 4vw, 1.875rem);
+    --font-size-h2: clamp(1.25rem, 3vw, 1.5rem);
+    --font-size-h3: clamp(1.125rem, 2.5vw, 1.25rem);
+    --font-size-lg: clamp(1rem, 1.5vw, 1.125rem);
+    --font-size-base: clamp(0.9375rem, 1.5vw, 1rem);
+    --font-size-sm: clamp(0.8125rem, 1.2vw, 0.875rem);
+    --font-size-xs: 0.75rem;
+    --font-size-code: 0.875rem;
+
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-none: 1;
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    --letter-spacing-tight: -0.025em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.025em;
+
+    /* 2. Spacing & Layout */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    --max-width-xs: 10rem;
+    --max-width-sm: 15rem;
+    --max-width-md: 20rem;
+    --max-width-lg: 30rem;
+    --max-width-xl: 40rem;
+    --max-width-2xl: 64rem;
+    --max-width-3xl: 80rem;
+
+    --breakpoint-mobile: 767px;
+    --breakpoint-tablet: 768px;
+    --breakpoint-desktop: 1024px;
+
+    /* 3. Borders & Elevation */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-full: 9999px;
+
+    --border-width-sm: 1px;
+    --border-width-md: 2px;
+    --border-width-lg: 4px;
+
+    --z-index-dropdown: 10;
+    --z-index-sticky: 100;
+    --z-index-fixed: 500;
+    --z-index-modal: 1500;
+    --z-index-tooltip: 3000;
+
+    --shadow-bottom-sm: 0 1px 2px 0 oklch(0% 0 0 / 0.05);
+    --shadow-bottom-lg:
+        0 10px 15px -3px oklch(0% 0 0 / 0.1),
+        0 4px 6px -2px oklch(0% 0 0 / 0.05);
+
+    /* 4. Color Primitives */
+    --color-neutral-50: oklch(98.46% 0.0017 247.8);
+    --color-neutral-100: oklch(96.7% 0.0029 264.5);
+    --color-neutral-200: oklch(92.76% 0.0058 264.5);
+    --color-neutral-300: oklch(87.17% 0.0093 258.3);
+    --color-neutral-400: oklch(71.37% 0.0192 261.3);
+    --color-neutral-500: oklch(55.1% 0.0234 264.4);
+    --color-neutral-600: oklch(44.61% 0.0263 256.8);
+    --color-neutral-700: oklch(37.29% 0.0306 259.7);
+    --color-neutral-800: oklch(27.81% 0.0296 256.8);
+    --color-neutral-900: oklch(21.01% 0.0318 264.7);
+
+    --color-white: oklch(100% 0 0);
+    --color-black: oklch(0% 0 0);
+
+    --color-red-light: oklch(95% 0.02 20);
+    --color-red-main: oklch(60% 0.12 20);
+    --color-red-dark: oklch(40% 0.1 20);
+
+    --color-green-light: oklch(96% 0.02 150);
+    --color-green-main: oklch(60% 0.1 150);
+    --color-green-dark: oklch(40% 0.08 150);
+
+    --color-orange-light: oklch(96% 0.02 60);
+    --color-orange-main: oklch(65% 0.1 60);
+    --color-orange-dark: oklch(45% 0.08 60);
+
+    --color-blue-light: oklch(96% 0.02 250);
+    --color-blue-main: oklch(65% 0.08 250);
+    --color-blue-dark: oklch(45% 0.08 250);
+
+    /* 5. Semantic Tokens */
+    --color-bg-app: var(--color-neutral-50);
+    --color-bg-surface: var(--color-white);
+    --color-bg-hover: var(--color-neutral-100);
+    --color-bg-subtle: var(--color-neutral-100);
+    --color-bg-row-alt: var(--color-neutral-50);
+
+    --color-text-primary: var(--color-neutral-900);
+    --color-text-secondary: var(--color-neutral-600);
+    --color-text-on-dark: var(--color-white);
+
+    --color-border: var(--color-neutral-100);
+    --color-input-border: var(--color-neutral-300);
+    --color-input-focus: var(--color-neutral-500);
+    --color-input-focus-ring: oklch(55.1% 0.0234 264.4 / 0.1);
+
+    --focus-ring-width: var(--border-width-md);
+    --focus-ring-offset: 2px;
+
+    --color-info: var(--color-blue-main);
+    --color-info-bg: var(--color-blue-light);
+    --color-info-text: var(--color-blue-dark);
+
+    --color-error: var(--color-red-main);
+    --color-error-bg: var(--color-red-light);
+    --color-error-text: var(--color-red-dark);
+
+    --color-warning: var(--color-orange-main);
+    --color-warning-bg: var(--color-orange-light);
+    --color-warning-text: var(--color-orange-dark);
+
+    --color-success: var(--color-green-main);
+    --color-success-bg: var(--color-green-light);
+    --color-success-text: var(--color-green-dark);
+
+    /* 6. Interaction Tokens */
+    --state-hover-overlay: oklch(0% 0 0 / 0.05);
+    --opacity-disabled: 0.5;
+    --duration-fast: 0.15s;
+    --transition-fast: var(--duration-fast) ease-in-out;
+
+    --action-bg-primary: var(--color-neutral-800);
+    --action-text-primary: var(--color-text-on-dark);
+    --action-bg-primary-hover: var(--color-neutral-900);
+    --action-border-secondary: var(--color-neutral-400);
+    --action-border-secondary-hover: var(--color-neutral-600);
+
+    /* 7. Component Variables */
+
+    /* Tables */
+    --table-sticky-top: var(--layout-nav-height);
+    --table-sticky-z-index: var(--z-index-sticky);
+    --table-font-size: var(--font-size-base);
+    --table-cell-padding-vertical: var(--space-md);
+    --table-cell-padding-horizontal: var(--space-sm);
+    --table-header-font-size: var(--font-size-sm);
+    --table-header-font-weight: var(--font-weight-bold);
+    --table-bg-header: var(--color-bg-subtle);
+    --table-border-color: var(--color-border);
+    --table-border-header: var(--color-neutral-400);
+    --table-col-min-width: 20ch;
+    --table-col-actions-width: 9.375rem;
+
+    /* Buttons */
+    --button-font-size: var(--font-size-base);
+    --button-padding-vertical: var(--space-sm);
+    --button-padding-horizontal: var(--space-md);
+    --button-border-radius: var(--radius-sm);
+    --button-font-weight: var(--font-weight-medium);
+
+    /* Forms */
+    --form-input-padding-vertical: var(--space-sm);
+    --form-input-padding-horizontal: var(--space-md);
+    --form-input-border-radius: var(--radius-sm);
+    --form-input-font-size: var(--font-size-base);
+    --form-label-font-size: var(--font-size-sm);
+    --form-label-font-weight: var(--font-weight-medium);
+
+    /* Badges & Status */
+    --badge-font-size: var(--font-size-sm);
+    --badge-padding-vertical: calc(var(--space-xs) / 2);
+    --badge-padding-horizontal: var(--space-sm);
+    --badge-border-radius: var(--radius-sm);
+    --badge-dot-sm: 0.5rem;
+    --status-dot-default: var(--color-neutral-400);
+
+    /* Alerts */
+    --alert-padding-vertical: var(--space-md);
+    --alert-padding-horizontal: var(--space-lg);
+    --alert-border-radius: var(--radius-sm);
+    --alert-font-size: var(--font-size-base);
+
+    /* Default Alert Fallbacks */
+    --alert-bg-default: var(--color-neutral-100);
+    --alert-border-default: var(--color-neutral-200);
+    --alert-accent-default: var(--color-neutral-400);
+    --alert-text-default: var(--color-text-primary);
+
+    /* Popovers & Tooltips */
+    --popover-padding: var(--space-md);
+    --popover-border-radius: var(--radius-sm);
+    --popover-max-width: var(--max-width-md);
+    --popover-bg: var(--color-bg-surface);
+    --tooltip-bg: var(--color-neutral-800);
+    --tooltip-text: var(--color-white);
+
+    /* Dialog Sizing - Refined for better visual balance */
+    --dialog-width: var(
+        --max-width-xl
+    ); /* 40rem / 640px - Standard modal width */
+    --dialog-max-width: 90vw;
+    --dialog-max-height: 85vh;
+
+    /* 8. Overlay Tokens */
+    --color-overlay-dark: oklch(
+        0% 0 0 / 0.45
+    ); /* Perceptually balanced dimming */
+    --blur-sm: 4px;
+
+    /* 9. Icons */
+    --icon-size-sm: 0.875rem;
+    --icon-size-md: 1.25rem;
+    --icon-size-lg: 1.5rem;
+    --icon-size-xl: 2rem;
+}

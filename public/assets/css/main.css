@@ -1,0 +1,30 @@
+/* ==========================================================================
+   MAIN.CSS
+   Entry point for the Design System.
+   Order follows the ITCSS (Inverted Triangle CSS) architecture.
+   ========================================================================== */
+
+/* 1. Settings & Tools (Variables/Mixins) */
+@import '000-variables.css';
+@import '010-reset.css';
+
+/* 2. Generic & Base (Unclassed HTML elements) */
+@import '020-typography.css';
+@import '030-icons.css';
+
+/* 3. Objects (Layout structures) */
+@import '040-layout.css';
+@import '050-grid.css';
+
+/* 4. Components (Specific UI pieces) */
+@import '060-buttons.css';
+@import '070-badges.css';
+@import '080-alerts.css';
+@import '090-forms.css';
+@import '100-tables.css';
+@import '110-dialogs.css';
+@import '120-popovers.css';
+@import '125-tooltips.css';
+
+/* 5. Utilities (High specificity overrides) */
+@import '130-utilities.css';

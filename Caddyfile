@@ -1,0 +1,88 @@
+# --- Global Options ---
+{
+	local_certs
+	log {
+		output file ./logs/system.log {
+			roll_size .25mb
+			roll_keep 1
+			roll_keep_for 2h
+		}
+		format console
+		level INFO
+	}
+}
+
+# --- Snippets ---
+(standard_logs) {
+	log {
+		output file ./logs/access.log {
+			roll_size .125mb
+			roll_keep 1
+			roll_keep_for 2h
+		}
+		format console
+		level INFO
+	}
+}
+
+(static_security) {
+	@forbidden {
+		path */.* *.sqlite *.db *.sql
+	}
+	error @forbidden 404
+}
+
+# --- Redirect: Localhost to Primary Domain ---
+https://localhost {
+	redir https://{$APP_DOMAIN}{uri} 302
+}
+
+# --- Manager URL ---
+https://{$APP_DOMAIN} {
+	tls internal
+	root * ./public
+	encode zstd gzip
+	import standard_logs
+	import static_security
+
+	php_server {
+		env PHPRC .
+	}
+
+	route {
+		try_files {path} {path}/index.php {path}/index.html /index.php?{query}
+	}
+}
+
+# --- Resolver URL ---
+https://{$RESOLVER_DOMAIN} {
+	tls internal
+	root * ./resolver
+	import standard_logs
+	import static_security
+
+	# php_server corrected from PHRPC to PHPRC
+	php_server {
+		env PHPRC .
+	}
+
+	# Block common web crawlers/bots
+	@badbots {
+		header_regexp User-Agent (?i)bot|crawler|spider
+	}
+	handle @badbots {
+		respond "Bot traffic blocked" 403
+	}
+
+	@favicon {
+		path /favicon.ico
+	}
+	handle @favicon {
+		respond "" 204
+	}
+
+	# Route all unmatched requests to the resolver index.php
+	route {
+		try_files {path} /index.php?{query}
+	}
+}

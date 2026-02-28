@@ -1,0 +1,88 @@
+/* dialog.css - Structural Layout Only */
+
+dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: var(--dialog-width);
+    max-width: var(--dialog-max-width);
+    max-height: var(--dialog-max-height);
+    background-color: var(--color-bg-surface);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-bottom-lg);
+    border: none;
+    padding: 0;
+    z-index: var(--z-index-modal);
+    display: none;
+}
+
+dialog[open] {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Dimmed background logic */
+dialog::backdrop {
+    background-color: var(--color-overlay-dark);
+    backdrop-filter: blur(var(--blur-sm));
+}
+
+.dialog__header,
+.dialog__footer {
+    background-color: var(--color-bg-subtle);
+    padding: var(--space-lg) var(--space-xl);
+}
+
+.dialog__header {
+    border-bottom: var(--border-width-sm) solid var(--color-border);
+}
+
+.dialog__content {
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Logic for the 2-column form layout */
+.dialog__content--grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+}
+
+.dialog__footer {
+    border-top: var(--border-width-sm) solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Utility for full-width items in grid */
+.field-full {
+    grid-column: 1 / -1;
+}
+
+/* Mobile responsive handling */
+@media (max-width: 767px) {
+    dialog {
+        width: 95vw;
+        max-height: 95vh;
+    }
+
+    .dialog__content--grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dialog__footer {
+        flex-direction: column-reverse;
+        gap: var(--space-md);
+    }
+}
+
+/* Allows the form to not break the flexbox layout */
+dialog form {
+    display: contents;
+}

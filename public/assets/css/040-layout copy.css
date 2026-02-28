@@ -1,0 +1,94 @@
+/* ==========================================================================
+   040-LAYOUT.CSS (PAGE SHELL)
+   ========================================================================== */
+
+/**
+ * .site-layout
+ * The primary wrapper for the entire page.
+ */
+.site-layout {
+    display: grid;
+    /* Mobile: Single column stack */
+    grid-template-areas:
+        'header'
+        'navbar'
+        'main'
+        'sidebar'
+        'footer';
+    grid-template-rows: auto auto 1fr auto auto;
+    min-height: 100dvh;
+    margin-inline: auto;
+    width: 95%;
+    max-width: var(--max-width-3xl);
+    gap: var(--space-md);
+}
+
+/**
+ * Desktop Breakpoint (1024px+)
+ */
+@media (min-width: 1024px) {
+    .site-layout {
+        grid-template-columns: var(--max-width-sm) 1fr;
+        grid-template-areas:
+            'header  header'
+            'navbar  navbar'
+            'sidebar main'
+            'footer  footer';
+        grid-template-rows: auto auto 1fr auto;
+    }
+
+    /* Center main content if sidebar is absent */
+    .site-layout:not(:has(.site-sidebar)) {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'header'
+            'navbar'
+            'main'
+            'footer';
+    }
+}
+
+/* Area Assignments */
+
+.site-header {
+    grid-area: header;
+    background-color: var(--color-bg-surface);
+}
+
+.site-nav {
+    grid-area: navbar;
+    background-color: var(--color-bg-surface);
+
+    /* Sticky Logic */
+    position: sticky;
+    top: 0;
+    /* 101: Ensures it stays above sticky table headers (100) */
+    z-index: calc(var(--z-index-sticky) + 1);
+
+    /* Ensure the nav doesn't become transparent when floating */
+    border-bottom: var(--border-width-sm) solid var(--color-border);
+}
+
+.site-main {
+    grid-area: main;
+    background-color: var(--color-bg-surface);
+    min-width: 0; /* Prevents grid blowout from large tables */
+}
+
+.site-sidebar {
+    grid-area: sidebar;
+    background-color: var(--color-bg-surface);
+    border-radius: var(--radius-md);
+
+    /* Optional: If you want the sidebar to stay visible while scrolling main */
+    position: sticky;
+    top: var(--layout-nav-height);
+    height: fit-content;
+}
+
+.site-footer {
+    grid-area: footer;
+    background-color: var(--color-bg-surface);
+    border-top: var(--border-width-sm) solid var(--color-border);
+    padding: var(--space-lg) 0;
+}

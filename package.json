@@ -1,0 +1,28 @@
+{
+  "name": "ark-manager",
+  "description": "...",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "dotenv -- ./frankenphp run --config Caddyfile --watch",
+    "view": "open -a 'Firefox Developer Edition' https://learn.test",
+    "stop": "./frankenphp stop",
+    "format": "prettier --write --ignore-path .gitignore . ; ./frankenphp fmt --overwrite Caddyfile",
+    "lint": "prettier --check . ; ./frankenphp validate --config Caddyfile",
+    "logs:clean": "rm -rf ./caddy_storage ./logs/*.log",
+    "db:dir": "dotenv -- sh -c 'echo Database file storage location set to $DB_DIR'",
+    "db:name": "dotenv -- sh -c 'echo Database file name is set to $DB_NAME'",
+    "db:delete": "dotenv -- sh -c 'rm -rf \"${DB_DIR:?}/\"*'",
+    "db:build": "dotenv -- ./frankenphp php-cli ./scripts/build-arks-db.php",
+    "db:rebuild": "npm run db:delete && npm run db:build",
+    "db:seed": "dotenv -- sh -c 'sqlite3 \"${DB_DIR}/${DB_NAME}\" < scripts/db-setup/60-seed-tables-all.sql'",
+    "db:build-seed": "npm run db:rebuild ; npm run db:seed",
+    "db:rebuild-seed": "npm run db:rebuild ; npm run db:seed",
+    "db:browse": "dotenv -- sh -c 'open -a \"DB Browser for SQLite\" \"${DB_DIR:?}/${DB_NAME:?}\"'"
+  },
+  "devDependencies": {
+    "@prettier/plugin-php": "^0.24.0",
+    "dotenv-cli": "^11.0.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-sql": "^0.19.2"
+  }
+}

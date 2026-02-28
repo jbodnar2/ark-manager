@@ -1,0 +1,13 @@
+# Ignore the Caddyfile because Prettier doesn't know the syntax
+Caddyfile
+
+# Ignore compiled assets or third-party libraries
+static/vendor/
+*.min.js
+
+# Prettier already ignores node_modules by default,
+# but adding it here doesn't hurt.
+node_modules/
+
+# Ignore custom browse temlate
+*/templates/browse.html

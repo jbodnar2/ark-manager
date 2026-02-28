@@ -1,0 +1,156 @@
+/* Modern Reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Prevent overflow issues */
+html {
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+    /* Base font size for better accessibility */
+    font-size: 100%; /* Respects user's browser settings (typically 16px) */
+    scroll-behavior: smooth;
+}
+
+/* Skip link for keyboard accessibility */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--color-neutral-800);
+    color: var(--color-white);
+    padding: var(--space-sm) var(--space-md);
+    z-index: var(--z-index-tooltip);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    border-radius: 0 0 var(--radius-sm) 0;
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: var(--focus-ring-width) solid var(--color-input-focus);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-base);
+    background-color: var(--color-bg-app);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Media elements */
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+/* Form elements inherit font */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Button reset */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+}
+
+/* List reset */
+ul,
+ol {
+    list-style: none;
+}
+
+/* Table reset */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Remove built-in form typography */
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+    appearance: none;
+}
+
+/* Accessible line height for headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+/* Better text rendering */
+p,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+/* ==========================================================================
+   FORM RESET BITS
+   ========================================================================== */
+
+/**
+ * 1. Correct the inheritance of font size and family in all browsers.
+ * 2. Remove default margin and padding.
+ * 3. Ensure fieldsets do not expand beyond their containers in Grid/Flexbox.
+ */
+fieldset {
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+}
+
+legend {
+    display: table;
+    max-width: 100%;
+    white-space: normal;
+    color: inherit;
+    padding: 0;
+}
+
+textarea {
+    overflow: auto;
+    resize: vertical;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}

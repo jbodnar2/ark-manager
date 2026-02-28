@@ -1,0 +1,178 @@
+/* ==========================================================================
+   090-FORMS.CSS
+   ========================================================================== */
+
+/* 1. Field Containers and Labels */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.form-field label {
+    font-size: var(--form-label-font-size);
+    font-weight: var(--form-label-font-weight);
+    color: var(--color-text-secondary);
+}
+
+/* 2. Grouping Elements (Fieldsets & Legends) */
+fieldset {
+    border: var(--border-width-sm) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+legend {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    padding: 0 var(--space-sm);
+    background-color: var(--color-bg-surface);
+}
+
+label:has(+ [required])::after {
+    content: ' (required)' / 'required';
+    font-size: var(--font-size-xs);
+}
+
+/* 3. Textual Inputs (Global Class-Based Styling) */
+/* Targeted by class or standard input types for broad compatibility */
+.form-input,
+input:not([type='checkbox']):not([type='radio']):not([type='file']):not(
+        [type='range']
+    ):not([type='submit']):not([type='reset']):not([type='button']),
+textarea,
+select {
+    width: 100%;
+    padding: var(--form-input-padding-vertical)
+        var(--form-input-padding-horizontal);
+    border: var(--border-width-sm) solid var(--color-input-border);
+    background-color: var(--color-bg-surface);
+    border-radius: var(--form-input-border-radius);
+    font-size: var(--form-input-font-size);
+    font-family: inherit;
+    color: var(--color-text-primary);
+    transition: border-color var(--transition-fast) ease;
+}
+
+.form-input:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--action-bg-primary);
+}
+
+/* 3.1 Special Handling for Select Arrows */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Custom Arrow SVG (encoded) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--form-input-padding-horizontal) center;
+    background-size: 1.25rem;
+    padding-right: calc(var(--form-input-padding-horizontal) * 3);
+}
+
+/* Update arrow color on focus to match brand */
+select:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* 3.2 Field Messages and Validation */
+.field-message {
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-xs);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-normal);
+}
+
+.field-message--error {
+    color: var(--color-error);
+}
+
+/* 4. Checkboxes and Radios */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+    margin-bottom: var(--space-xs);
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+    accent-color: var(--action-bg-primary);
+    width: 1.15rem;
+    height: 1.15rem;
+    cursor: pointer;
+}
+
+/* 5. Range Slider */
+.form-range {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 2rem;
+    background: transparent;
+    cursor: pointer;
+}
+
+.form-range::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+}
+
+.form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 1.25rem;
+    width: 1.25rem;
+    background: var(--action-bg-primary);
+    border-radius: var(--radius-sm);
+    margin-top: -8px;
+    border: 1px solid var(--action-bg-primary);
+}
+
+.form-range::-moz-range-track {
+    width: 100%;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+}
+
+.form-range::-moz-range-thumb {
+    height: 1.25rem;
+    width: 1.25rem;
+    background: var(--action-bg-primary);
+    border-radius: var(--radius-sm);
+    border: none;
+}
+
+/* 6. File Input Selector */
+.form-file::file-selector-button {
+    padding: var(--space-xs) var(--space-sm);
+    border: var(--border-width-sm) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-primary);
+    margin-right: var(--space-md);
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* 7. Action Layout */
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
