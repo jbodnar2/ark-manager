@@ -12,7 +12,7 @@
     "db:dir": "dotenv -- sh -c 'echo Database file storage location set to $DB_DIR'",
     "db:name": "dotenv -- sh -c 'echo Database file name is set to $DB_NAME'",
     "db:delete": "dotenv -- sh -c 'rm -rf \"${DB_DIR:?}/\"*'",
-    "db:build": "dotenv -- ./frankenphp php-cli ./scripts/build-arks-db.php",
+    "db:build": "dotenv -- ./frankenphp php-cli ./scripts/db-setup/90-build-arks-db.php",
     "db:rebuild": "npm run db:delete && npm run db:build",
     "db:seed": "dotenv -- sh -c 'sqlite3 \"${DB_DIR}/${DB_NAME}\" < scripts/db-setup/60-seed-tables-all.sql'",
     "db:build-seed": "npm run db:rebuild ; npm run db:seed",
