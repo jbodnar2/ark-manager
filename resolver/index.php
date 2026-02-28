@@ -25,7 +25,6 @@ $db_file =
     DIRECTORY_SEPARATOR .
     $config['db']['name'];
 $analytics_enabled = $config['analytics']['enabled'];
-$analytics_salt = $config['salts']['analytics'];
 
 try {
     $db = new PDO('sqlite:' . $db_file);
@@ -46,7 +45,8 @@ if ($requested_ark === null || $requested_ark === '') {
 }
 
 try {
-    $sql = 'SELECT a.*, n.naan_value, n.label AS organization, s.label AS shoulder_label
+    // UPDATED: Mapping to new column names: naan, naa_name, shoulder_name
+    $sql = 'SELECT a.*, n.naan, n.naa_name AS name_authority, s.shoulder_name
             FROM arks a
             LEFT JOIN shoulders s ON a.shoulder_id = s.id
             LEFT JOIN naans n ON s.naan_id = n.id
@@ -65,16 +65,17 @@ if (!$ark) {
     exit('ARK Not Found');
 }
 
-// 1. Log Analytics immediately for all successful lookups
-if ($analytics_enabled && !empty($analytics_salt)) {
-    $exclude_ips = ['127.0.0.1', '::1']; // TODO: Set config option for this
+// 1. Log Analytics
+if ($analytics_enabled) {
+    // $exclude_ips = ['127.0.0.1', '::1'];
+    $exclude_ips = [];
 
     if (!in_array($_SERVER['REMOTE_ADDR'] ?? '', $exclude_ips)) {
         try {
             $yearMonth = date('Y-m');
             $sql = "INSERT INTO ark_analytics_monthly (ark_id, year_month, hit_count)
-                            VALUES (:id, :ym, 1)
-                            ON CONFLICT(ark_id, year_month) DO UPDATE SET hit_count = hit_count + 1";
+                    VALUES (:id, :ym, 1)
+                    ON CONFLICT(ark_id, year_month) DO UPDATE SET hit_count = hit_count + 1";
 
             $insert = $db->prepare($sql);
             $insert->execute([':id' => $ark['id'], ':ym' => $yearMonth]);
@@ -93,7 +94,7 @@ if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
     $info = [
         'ark' => $ark['full_ark'],
         'state' => $ark_state,
-        'target' => $ark_target_url,
+        'target' => $ark_target_url ?: null,
         'metadata' => [
             'title' => $ark['title'],
             'creator' => $ark['creator'],
@@ -101,9 +102,9 @@ if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
             'relation' => $ark['relation'],
         ],
         'commitment' => [
-            'naan' => $ark['naan_value'],
-            'organization' => $ark['organization'],
-            'shoulder_label' => $ark['shoulder_label'],
+            'naan' => $ark['naan'], // UPDATED: naan_value -> naan
+            'name_authority' => $ark['name_authority'],
+            'shoulder_label' => $ark['shoulder_name'], // UPDATED: shoulder_label -> shoulder_name
         ],
         'dates' => [
             'created' => $ark['created_at'],
@@ -120,6 +121,8 @@ if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
             'private' => 403,
             'legal' => 451,
             'takedown' => 451,
+            'temporary' => 503,
+            'under_review' => 503,
         ];
         $status = $status_codes[$ark['withdrawal_code']] ?? 410;
         $info['withdrawal'] = [
@@ -141,8 +144,8 @@ if ($ark_state === 'reserved') {
         'state' => 'reserved',
         'status' => 'Reserved',
         'commitment' => [
-            'naan' => $ark['naan_value'],
-            'organization' => $ark['organization'],
+            'naan' => $ark['naan'], // UPDATED: naan_value -> naan
+            'name_authority' => $ark['name_authority'],
         ],
     ];
 
