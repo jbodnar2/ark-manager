@@ -20,6 +20,12 @@ return [
         'dir' => getenv('DB_DIR') ?: 'database',
         'name' => getenv('DB_NAME') ?: 'arks-db.sqlite',
     ],
+    'arks' => [
+        'public_reserved' => filter_var(
+            getenv('ARKS_PUBLIC_RESERVED'),
+            FILTER_VALIDATE_BOOLEAN,
+        ),
+    ],
     'analytics' => [
         'enabled' => filter_var(
             getenv('ANALYTICS_ENABLED'),

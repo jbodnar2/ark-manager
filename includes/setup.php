@@ -57,4 +57,4 @@ try {
 }
 
 // 6. Utilities & Functions
-// require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/functions.php';

@@ -4,9 +4,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/setup.php';
 require_once __DIR__ . '/../includes/Router.php';
 
-// ini_set('display_errors', '0');
-// ini_set('log_errors', '1');
-
 if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) {
     http_response_code(405);
     header('Content-Type: text/plain; charset=utf-8');
@@ -25,6 +22,7 @@ $db_file =
     DIRECTORY_SEPARATOR .
     $config['db']['name'];
 $analytics_enabled = $config['analytics']['enabled'];
+$public_reserved = $config['arks']['public_reserved'];
 
 try {
     $db = new PDO('sqlite:' . $db_file);
@@ -137,7 +135,7 @@ if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
 }
 
 // 3.5. Optional -  reserved State
-if ($ark_state === 'reserved') {
+if ($public_reserved && $ark_state === 'reserved') {
     $info = [
         'ark' => $ark['full_ark'],
         'state' => 'reserved',
