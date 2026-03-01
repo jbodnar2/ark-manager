@@ -86,7 +86,7 @@ if ($analytics_enabled) {
 $ark_state = strtolower((string) ($ark['state'] ?? 'unknown'));
 $ark_target_url = filter_var($ark['target_url'] ?? '', FILTER_VALIDATE_URL);
 
-// 3. Branching Logic (Metadata or Withdrawn)
+// 3. Construct metadata, handle withdrawn
 if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
     $info = [
         'ark' => $ark['full_ark'],
@@ -134,7 +134,7 @@ if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
     exit(json_encode($info, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 }
 
-// 3.5. Optional -  reserved State
+// 3.5. Optional - public reserved-state ark info
 if ($public_reserved && $ark_state === 'reserved') {
     $info = [
         'ark' => $ark['full_ark'],

@@ -2,8 +2,7 @@
 
 return [
     'app' => [
-        'name' => getenv('MANAGER_NAME') ?: 'ARK Manager',
-        'env' => getenv('APP_ENV') ?: 'production',
+        'env' => getenv('APP_ENV') ?: 'prod',
         'debug' => filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN),
         'timezone' => 'America/New_York',
         'root' => __DIR__,
@@ -16,6 +15,8 @@ return [
             'resolver' => getenv('RESOLVER_DOMAIN'),
         ],
     ],
+    'manager' => [getenv('MANAGER_NAME') ?: 'Manager'],
+    'resolver' => [getenv('RESOLVER_NAME') ?: 'Resolver'],
     'db' => [
         'dir' => getenv('DB_DIR') ?: 'database',
         'name' => getenv('DB_NAME') ?: 'arks-db.sqlite',
