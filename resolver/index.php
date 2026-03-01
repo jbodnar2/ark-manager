@@ -45,8 +45,7 @@ if ($requested_ark === null || $requested_ark === '') {
 }
 
 try {
-    // UPDATED: Mapping to new column names: naan, naa_name, shoulder_name
-    $sql = 'SELECT a.*, n.naan, n.naa_name AS name_authority, s.shoulder_name
+    $sql = 'SELECT a.*, n.naan, n.naa_name AS name_authority, s.shoulder_name, s.shoulder
             FROM arks a
             LEFT JOIN shoulders s ON a.shoulder_id = s.id
             LEFT JOIN naans n ON s.naan_id = n.id
@@ -102,9 +101,9 @@ if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
             'relation' => $ark['relation'],
         ],
         'commitment' => [
-            'naan' => $ark['naan'], // UPDATED: naan_value -> naan
+            'naan' => $ark['naan'],
             'name_authority' => $ark['name_authority'],
-            'shoulder_label' => $ark['shoulder_name'], // UPDATED: shoulder_label -> shoulder_name
+            'shoulder_label' => $ark['shoulder_name'],
         ],
         'dates' => [
             'created' => $ark['created_at'],
@@ -137,15 +136,17 @@ if ($ark_state === 'withdrawn' || isset($_GET['info'])) {
     exit(json_encode($info, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 }
 
-// 3.5. Branching Logic (Reserved State)
+// 3.5. Optional -  reserved State
 if ($ark_state === 'reserved') {
     $info = [
         'ark' => $ark['full_ark'],
         'state' => 'reserved',
-        'status' => 'Reserved',
+        'reserved_note' => $ark['reserved_note'],
         'commitment' => [
-            'naan' => $ark['naan'], // UPDATED: naan_value -> naan
+            'naan' => $ark['naan'],
             'name_authority' => $ark['name_authority'],
+            'shoulder' => $ark['shoulder'],
+            'shoulder_name' => $ark['shoulder_name'],
         ],
     ];
 
@@ -154,7 +155,7 @@ if ($ark_state === 'reserved') {
     exit(json_encode($info, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 }
 
-// 4. Branching Logic (Active Redirect)
+// 4. Redirect active-state ARKs
 if ($ark_state === 'active' && $ark_target_url) {
     if (preg_match('/[\r\n]/', $ark_target_url) === 0) {
         header('Location: ' . trim($ark_target_url), true, 302);

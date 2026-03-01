@@ -75,3 +75,18 @@
 - `\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b` → IP addresses
 
 Watch the bottom-right corner — it shows context-specific hints while you use lnav.
+
+## Multi-File Viewing & Navigation
+
+| Action                        | Keys / Command                   |
+| ----------------------------- | -------------------------------- |
+| Next file                     | `Shift + j`                      |
+| Previous file                 | `Shift + k`                      |
+| Jump to specific file (fuzzy) | `Ctrl + t` then type filename    |
+| Show only current file        | `:hide-other-files`              |
+| Show all files again          | `:show-all-files`                |
+| See list of loaded files      | `Tab` (opens config/files panel) |
+
+The bottom status bar always shows the current file name (and how many files are loaded total). Watch that while pressing `Shift + j/k` to know when you've reached the one you want.
+
+Try `Shift + j` first
