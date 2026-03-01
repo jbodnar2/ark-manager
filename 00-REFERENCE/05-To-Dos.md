@@ -5,6 +5,7 @@
 ### TODO
 
 - [ ] TODO: Filtering ip ranges for access logging and statistics
+- [ ] TODO: Update stats weekly instead of monthly?
 - [ ] TODO: ...
 - [ ] TODO: ...
 

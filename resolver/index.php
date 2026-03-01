@@ -22,6 +22,7 @@ $db_file =
     DIRECTORY_SEPARATOR .
     $config['db']['name'];
 $analytics_enabled = $config['analytics']['enabled'];
+$analytics_exclude_ips_singles = $config['analytics']['exclude_ips_singles'];
 $public_reserved = $config['arks']['public_reserved'];
 
 try {
@@ -64,10 +65,9 @@ if (!$ark) {
 
 // 1. Log Analytics
 if ($analytics_enabled) {
-    // $exclude_ips = ['127.0.0.1', '::1'];
-    $exclude_ips = [];
-
-    if (!in_array($_SERVER['REMOTE_ADDR'] ?? '', $exclude_ips)) {
+    if (
+        !in_array($_SERVER['REMOTE_ADDR'] ?? '', $analytics_exclude_ips_singles)
+    ) {
         try {
             $yearMonth = date('Y-m');
             $sql = "INSERT INTO ark_analytics_monthly (ark_id, year_month, hit_count)

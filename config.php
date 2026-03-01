@@ -32,6 +32,13 @@ return [
             getenv('ANALYTICS_ENABLED'),
             FILTER_VALIDATE_BOOLEAN,
         ),
+        'exclude_ips_singles' => array_filter(
+            explode(',', getenv('ANALYTICS_EXCLUDE_IPS_SINGLES') ?: ''),
+        ),
+        'exclude_ips_ranges' => explode(
+            ',',
+            getenv('ANALYTICS_EXCLUDE_IPS_RANGES') ?: '',
+        ),
     ],
     'session' => [
         'lifetime' => 86400, // 24 hours
