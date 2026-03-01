@@ -21,9 +21,9 @@ $db_file =
     $config['db']['dir'] .
     DIRECTORY_SEPARATOR .
     $config['db']['name'];
+$public_reserved = $config['arks']['public_reserved'];
 $analytics_enabled = $config['analytics']['enabled'];
 $analytics_exclude_ips_singles = $config['analytics']['exclude_ips_singles'];
-$public_reserved = $config['arks']['public_reserved'];
 
 try {
     $db = new PDO('sqlite:' . $db_file);
