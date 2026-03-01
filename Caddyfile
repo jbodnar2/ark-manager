@@ -10,6 +10,17 @@
 		format console
 		level INFO
 	}
+
+	# Separate PHP Logs
+	log php_errors {
+		output file ./logs/php.log {
+			roll_size .25mb
+			roll_keep 1
+			roll_keep_for 2h
+		}
+		format console
+		level WARN
+	}
 }
 
 # --- Snippets ---
@@ -34,11 +45,11 @@
 
 # --- Redirect: Localhost to Primary Domain ---
 https://localhost {
-	redir https://{$APP_DOMAIN}{uri} 302
+	redir https://{$MANAGER_DOMAIN}{uri} 302
 }
 
 # --- Manager URL ---
-https://{$APP_DOMAIN} {
+https://{$MANAGER_DOMAIN} {
 	tls internal
 	root * ./public
 	encode zstd gzip

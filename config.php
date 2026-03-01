@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => getenv('APP_NAME') ?: 'ARK Manager',
+        'name' => getenv('MANAGER_NAME') ?: 'ARK Manager',
         'env' => getenv('APP_ENV') ?: 'production',
         'debug' => filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN),
         'timezone' => 'America/New_York',
@@ -12,7 +12,7 @@ return [
             FILTER_VALIDATE_BOOLEAN,
         ),
         'domains' => [
-            'manager' => getenv('APP_DOMAIN'),
+            'manager' => getenv('MANAGER_DOMAIN'),
             'resolver' => getenv('RESOLVER_DOMAIN'),
         ],
     ],
