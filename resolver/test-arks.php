@@ -230,7 +230,7 @@ if (!file_exists($dbFile)) {
 <?php if ($dbError): ?>
     <p><?php echo $dbError; ?></p>
 <?php else: ?>
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>ARK</th>
