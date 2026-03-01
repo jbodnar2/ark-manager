@@ -4,8 +4,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/setup.php';
 require_once __DIR__ . '/../includes/Router.php';
 
-ini_set('display_errors', '0');
-ini_set('log_errors', '1');
+// ini_set('display_errors', '0');
+// ini_set('log_errors', '1');
 
 if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) {
     http_response_code(405);

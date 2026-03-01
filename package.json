@@ -8,7 +8,7 @@
     "stop": "./frankenphp stop",
     "format": "prettier --write --ignore-path .gitignore . ; ./frankenphp fmt --overwrite Caddyfile",
     "lint": "prettier --check . ; ./frankenphp validate --config Caddyfile",
-    "logs:clean": "rm -rf ./caddy_storage ./logs/*.log",
+    "logs:clean": "rm -rf ./caddy_storage ./logs/*.log ; touch logs/access.log logs/system.log logs/php.log",
     "db:dir": "dotenv -- sh -c 'echo Database file storage location set to $DB_DIR'",
     "db:name": "dotenv -- sh -c 'echo Database file name is set to $DB_NAME'",
     "db:delete": "dotenv -- sh -c 'rm -rf \"${DB_DIR:?}/\"*'",
