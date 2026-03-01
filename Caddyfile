@@ -8,7 +8,7 @@
 			roll_keep_for 2h
 		}
 		format console
-		level INFO
+		level ERROR
 	}
 
 	# Separate PHP Logs
@@ -63,6 +63,8 @@ https://{$MANAGER_DOMAIN} {
 	route {
 		try_files {path} {path}/index.php {path}/index.html /index.php?{query}
 	}
+
+	log php_errors
 }
 
 # --- Resolver URL ---
@@ -96,4 +98,6 @@ https://{$RESOLVER_DOMAIN} {
 	route {
 		try_files {path} /index.php?{query}
 	}
+
+	log php_errors
 }
