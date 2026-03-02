@@ -54,20 +54,4 @@ class Router
 
         return $fallback_path;
     }
-
-    /**
-     * Maps a cleaned path slug to a key in the routes array.
-     *
-     * @param string $path    The cleaned path slug.
-     * @param array  $routes  The associative array of valid routes.
-     * @param string $default The fallback key if no match is found.
-     * @return string
-     */
-    public static function mapToRoute(
-        string $path,
-        array $routes,
-        string $default = 'error404',
-    ): string {
-        return array_key_exists($path, $routes) ? $path : $default;
-    }
 }

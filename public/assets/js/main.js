@@ -1,1 +1,2 @@
-console.log('Loaded main.js');
+import './dialogs.js';
+import './alerts.js';

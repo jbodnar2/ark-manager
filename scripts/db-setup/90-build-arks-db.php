@@ -26,14 +26,14 @@ try {
         );
     }
 
-    echo 'Set storage location: ' . $dbDir . DIRECTORY_SEPARATOR . PHP_EOL;
+    echo 'Set storage location: ' . $dbDir . '/' . PHP_EOL;
 
     // $dbFile =
-    //     $dbDir . DIRECTORY_SEPARATOR . getenv('DB_NAME') ?: 'db.sqlite';
+    //     $dbDir . "/" . getenv('DB_NAME') ?: 'db.sqlite';
     // $dsn = 'sqlite:' . $dbFile;
 
     $dbName = getenv('DB_NAME') ?: 'db.sqlite';
-    $dbFile = $dbDir . DIRECTORY_SEPARATOR . $dbName;
+    $dbFile = $dbDir . '/' . $dbName;
     $dsn = 'sqlite:' . $dbFile;
 
     // Open PDO (SQLite creates file if missing)

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "dotenv -- ./frankenphp run --config Caddyfile --watch",
-    "view": "open -a 'Firefox Developer Edition' https://learn.test",
+    "view": "open -a 'Firefox Developer Edition' https://manager.test",
     "stop": "./frankenphp stop",
     "format": "prettier --write --ignore-path .gitignore . ; ./frankenphp fmt --overwrite Caddyfile",
     "lint": "prettier --check . ; ./frankenphp validate --config Caddyfile",

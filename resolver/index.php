@@ -15,12 +15,7 @@ header('X-Frame-Options: DENY');
 header('Referrer-Policy: no-referrer');
 
 $root = $config['app']['root'];
-$db_file =
-    $root .
-    DIRECTORY_SEPARATOR .
-    $config['db']['dir'] .
-    DIRECTORY_SEPARATOR .
-    $config['db']['name'];
+$db_file = $root . '/' . $config['db']['dir'] . '/' . $config['db']['name'];
 $public_reserved = $config['arks']['public_reserved'];
 $analytics_enabled = $config['analytics']['enabled'];
 $analytics_exclude_ips_singles = $config['analytics']['exclude_ips_singles'];

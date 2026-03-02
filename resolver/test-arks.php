@@ -15,8 +15,7 @@ $per_request_timeout = 10;
 $projectRoot = dirname(__DIR__);
 $dbDir = getenv('DB_DIR') ?: 'data';
 $dbName = getenv('DB_NAME') ?: 'arks.sqlite';
-$dbFile =
-    $projectRoot . DIRECTORY_SEPARATOR . $dbDir . DIRECTORY_SEPARATOR . $dbName;
+$dbFile = $projectRoot . '/' . $dbDir . '/' . $dbName;
 
 // Helpers --------------------------------------------------------------------
 

@@ -12,6 +12,13 @@ if ($config['app']['debug']) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
     error_reporting(E_ALL);
+
+    $session_save_path = $config['app']['root'] . '/database/sessions';
+    if (!is_dir($session_save_path)) {
+        mkdir($session_save_path, 0700, true);
+    }
+
+    ini_set('session.save_path', $session_save_path);
 } else {
     ini_set('display_errors', '0');
     error_reporting(0);
@@ -38,9 +45,9 @@ session_start([
 try {
     $database_file =
         $config['app']['root'] .
-        DIRECTORY_SEPARATOR .
+        '/' .
         $config['db']['dir'] .
-        DIRECTORY_SEPARATOR .
+        '/' .
         $config['db']['name'];
 
     $db = new PDO('sqlite:' . $database_file);
@@ -53,8 +60,8 @@ try {
     $db->exec('PRAGMA foreign_keys = ON');
 } catch (PDOException $e) {
     error_log($e->getMessage());
-    exit('Error: Unable to connect to the database. Please try again later.');
+    exit('Error: Unable to connect to the database.');
 }
 
 // 6. Utilities & Functions
-require_once __DIR__ . '/functions.php';
+// require_once __DIR__ . '/functions.php';
