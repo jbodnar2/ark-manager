@@ -8,20 +8,11 @@ require_once __DIR__ . '/../setup.php';
 <pre>
 <?php var_dump($_SESSION); ?>
 
-<h1>Dashboard</h1>
+<h1>ARKs</h1>
 <p>Welcome back, <?php echo htmlspecialchars(
     $_SESSION['user']['first_name'],
 ); ?>!</p>
 <p>Your role is: <?php echo htmlspecialchars($_SESSION['user']['role']); ?></p>
 <a href="/logout">Logout</a>
 <br/>
-
-<ul>
-    <li><a href="/dashboard">Dashboard</a></li>
-    <li><a href="/users">Manage Users</a></li>
-    <li><a href="/naans">Manage NAANs</a></li>
-    <li><a href="/shoulders">Manage Shoulders</a></li>
-    <li><a href="/arks">Manage ARKs</a></li>
-
-</ul>
 </pre>

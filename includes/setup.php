@@ -61,6 +61,3 @@ try {
     error_log($e->getMessage());
     exit('Error: Unable to connect to the database.');
 }
-
-// 6. Utilities & Functions
-// require_once __DIR__ . '/functions.php';

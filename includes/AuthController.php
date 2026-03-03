@@ -3,24 +3,6 @@ declare(strict_types=1);
 
 class AuthController
 {
-    public static function isLoggedIn()
-    {
-        if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
-            return false;
-        }
-
-        $current_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-        $stored_ip = $_SESSION['user']['ip'] ?? '';
-
-        if ($current_ip !== $stored_ip) {
-            // Log out the user immediately if the IP changes
-            self::logout();
-            return false;
-        }
-
-        return true;
-    }
-
     public static function login(PDO $db): void
     {
         $username = $_POST['username'] ?? '';
@@ -43,7 +25,6 @@ class AuthController
                 'last_name' => $user['last_name'],
                 'role' => $user['role'],
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-                'user_agent' => $current_ua,
             ];
 
             header('Location: /dashboard');
@@ -56,6 +37,42 @@ class AuthController
 
         header('Location: /login');
         exit();
+    }
+
+    public static function isLoggedIn()
+    {
+        if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
+            return false;
+        }
+
+        $current_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $stored_ip = $_SESSION['user']['ip'] ?? '';
+
+        if ($current_ip !== $stored_ip) {
+            self::logout();
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function hasRole(string $required_role): bool
+    {
+        $user_role = $_SESSION['user']['role'] ?? 'unknown';
+
+        if ($required_role === 'admin') {
+            return $user_role === 'admin';
+        }
+
+        if ($required_role === 'user') {
+            return in_array($user_role, ['admin', 'user']);
+        }
+
+        if ($required_role === 'viewer') {
+            return in_array($user_role, ['admin', 'user', 'viewer']);
+        }
+
+        return false;
     }
 
     public static function logout(): void
