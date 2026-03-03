@@ -16,55 +16,60 @@ INSERT INTO
 VALUES
     (
         1,
-        'admin',
-        'Jon',
-        'Doe',
-        'j.doe@example.com',
-        'password',
+        'admin_1',
+        'Jareth',
+        'Goblin King',
+        'jareth@thegoblinking.org',
+        -- admin_password
+        '$argon2id$v=19$m=65536,t=4,p=1$9vwnmkN6U5yyDDDTcUaWgA$8obWTHCNvJCrrM9QbqQiPjdJTzUVjFssVEdZ0YcvEXk',
         'admin',
         NULL,
         '2026-01-10 08:00:00'
     ),
     (
         2,
-        'user_jane',
-        'Jane',
-        'Smith',
-        'j.smith@example.com',
-        'hash_3b9e2',
+        'admin_2',
+        'Sarah',
+        'Williams',
+        'sarah@thegoblinking.org',
+        -- admin_password
+        '$argon2id$v=19$m=65536,t=4,p=1$9vwnmkN6U5yyDDDTcUaWgA$8obWTHCNvJCrrM9QbqQiPjdJTzUVjFssVEdZ0YcvEXk',
         'user',
         NULL,
         '2026-01-11 09:15:00'
     ),
     (
         3,
-        'user_alice',
-        'Alice',
-        'Brown',
-        'a.brown@example.com',
-        'hash_c7d4e',
+        'user_1',
+        'Hoggle',
+        'Gardener',
+        'hoggle@thegoblinking.org',
+        -- user_password
+        '$argon2id$v=19$m=65536,t=4,p=1$PHnewEcWn53NWaABjTbYuA$zL9pVCdrlnhtAKlPDfqkA6gyhFEryCiBoF4pkOCuUK8',
         'user',
         NULL,
         '2026-01-12 10:30:00'
     ),
     (
         4,
-        'user_robert',
-        'Robert',
-        'Wilson',
-        'r.wilson@example.com',
-        'hash_f1a2b',
+        'user_2',
+        'Ludo',
+        'Beast',
+        'geokinesis@thegoblinking.org',
+        -- user_password
+        '$argon2id$v=19$m=65536,t=4,p=1$PHnewEcWn53NWaABjTbYuA$zL9pVCdrlnhtAKlPDfqkA6gyhFEryCiBoF4pkOCuUK8',
         'user',
         NULL,
         '2026-01-15 11:45:00'
     ),
     (
         5,
-        'viewer_emily',
-        'Emily',
-        'Davis',
-        'e.davis@example.com',
-        'hash_e5c8d',
+        'viewer_1',
+        'Sir',
+        'Didymus',
+        'knight-errant@thegoblinking.org',
+        -- viewer_password
+        '$argon2id$v=19$m=65536,t=4,p=1$5p/hMfD6gnDfklCLuf27yw$OnXFT2zrQYeJT6emlSt8KJzE7ktXAFV/QR0txfHfPlo',
         'viewer',
         NULL,
         '2026-02-01 14:20:00'
