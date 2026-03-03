@@ -17,6 +17,7 @@
 
         <main class="main">
             <form action="/auth" method="post">
+                <?php echo csrf_field(); ?>
                 <div class="form-field">
                     <label for="username">User Name</label>
                     <input type="text" name="username" id="username">
@@ -31,10 +32,25 @@
                     <input class="btn btn--primary btn--lg" type="reset" value="clear">
                 </div>
             </form>
+
+            <?php if (isset($_SESSION['error_message'])): ?>
+
+                    <?php
+                    echo htmlspecialchars($_SESSION['error_message']);
+                    unset($_SESSION['error_message']);
+                    ?>
+                </p>
+
             <div class="alert alert--warning">
                 <div class="alert__content">
                 <div class="alert__title">Info</div>
                 <div class="alert__message">
+                    <p>
+                    <?php
+                    echo htmlspecialchars($_SESSION['error_message']);
+                    unset($_SESSION['error_message']);
+                    ?>
+                    </p>
 
 
 
@@ -45,6 +61,9 @@
                     </div>
 
                 </div>
+
+            <?php endif; ?>
+
 
         </main>
         <!-- End .container -->

@@ -18,9 +18,12 @@ if ($request_route === 'logout') {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $request_route === 'auth') {
-    AuthController::login($db);
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    validate_csrf();
+    if ($request_route === 'auth') {
+        AuthController::login($db);
+        exit();
+    }
 }
 
 $public_routes = $routes['public'];

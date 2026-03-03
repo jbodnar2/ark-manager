@@ -6,6 +6,7 @@ ob_start();
 
 // 1. Load Configurations
 $config = require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/functions.php';
 
 // 2. Error Reporting Logic
 if ($config['app']['debug']) {
@@ -39,6 +40,8 @@ session_start([
     'cookie_secure' => $config['app']['https_only'],
     'cookie_httponly' => true,
 ]);
+
+ensure_csrf_token();
 
 // 5. Database Connection
 try {
