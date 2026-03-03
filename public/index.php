@@ -7,11 +7,11 @@ require_once __DIR__ . '/../includes/AuthController.php';
 
 $base_path = $config['app']['root'];
 
-$public_routes = ['', 'login'];
+$public_routes = ['', 'login', 'logout'];
 
 $protected_routes = [
-    'login' => 'login.php',
     '' => 'login.php',
+    'login' => 'login.php',
     'dashboard' => 'dashboard.php',
     'users' => 'manage-users.php',
     'naans' => 'manage-naans.php',

@@ -43,6 +43,7 @@ class AuthController
                 'last_name' => $user['last_name'],
                 'role' => $user['role'],
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+                'user_agent' => $current_ua,
             ];
 
             header('Location: /dashboard');
