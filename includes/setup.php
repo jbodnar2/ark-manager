@@ -13,11 +13,10 @@ if ($config['app']['debug']) {
     ini_set('display_startup_errors', '1');
     error_reporting(E_ALL);
 
-    $session_save_path = $config['app']['root'] . '/database/sessions';
+    $session_save_path = $config['app']['root'] . '/logs/sessions';
     if (!is_dir($session_save_path)) {
         mkdir($session_save_path, 0700, true);
     }
-
     ini_set('session.save_path', $session_save_path);
 } else {
     ini_set('display_errors', '0');

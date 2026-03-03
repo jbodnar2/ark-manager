@@ -3,6 +3,24 @@ declare(strict_types=1);
 
 class AuthController
 {
+    public static function isLoggedIn()
+    {
+        if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
+            return false;
+        }
+
+        $current_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $stored_ip = $_SESSION['user']['ip'] ?? '';
+
+        if ($current_ip !== $stored_ip) {
+            // Log out the user immediately if the IP changes
+            self::logout();
+            return false;
+        }
+
+        return true;
+    }
+
     public static function login(PDO $db): void
     {
         $username = $_POST['username'] ?? '';
