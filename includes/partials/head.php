@@ -14,4 +14,4 @@ require_once __DIR__ . '/../setup.php';
 	<title>Document</title>
 </head>
 <body>
-    <!-- End include head.php -->
+    <!-- Start body -->
