@@ -29,14 +29,14 @@ class AuthController
 
             header('Location: /dashboard');
             exit();
+        } else {
+            $_SESSION['error']['message'] = 'Invalid username or password';
+            $_SESSION['error']['attempts'] =
+                ($_SESSION['error']['attempts'] ?? 0) + 1;
+
+            header('Location: /login');
+            exit();
         }
-
-        $_SESSION['error']['message'] = 'Invalid username or password';
-        $_SESSION['error']['attempts'] =
-            ($_SESSION['error']['attempts'] ?? 0) + 1;
-
-        header('Location: /login');
-        exit();
     }
 
     public static function isLoggedIn()

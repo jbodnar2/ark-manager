@@ -15,12 +15,19 @@ function ensure_csrf_token(): void
 /**
  * Generates the HTML for a hidden CSRF input field.
  */
-function csrf_field(): string
+function csrf_field($echo = false): string
 {
     $token = $_SESSION['csrf_token'] ?? '';
-    return '<input type="hidden" name="csrf_token" value="' .
+    $field =
+        '<input type="hidden" name="csrf_token" value="' .
         htmlspecialchars($token) .
         '">';
+
+    if ($echo) {
+        print $field;
+    }
+
+    return $field;
 }
 
 /**

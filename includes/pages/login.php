@@ -8,21 +8,29 @@
 	<title>Manager Login</title>
 </head>
 <body>
-
     <div class="container">
-        <!-- Begin .container -->
         <header>
-    <h1>Manager Login</h1>
+            <h1>Manager Login</h1>
         </header>
 
         <main class="main">
+            <?php if (isset($_SESSION['error']['message'])): ?>
+            <div class="alert alert--error">
+                <div class="alert__message">
+
+                    <?= htmlspecialchars($_SESSION['error']['message']) ?>
+                    <?php unset($_SESSION['error']['message']); ?>
+
+                </div>
+            </div>
+            <?php endif; ?>
+
             <form action="/auth" method="post">
-                <?php echo csrf_field(); ?>
+                <?php csrf_field(true); ?>
                 <div class="form-field">
                     <label for="username">User Name</label>
                     <input type="text" name="username" id="username">
                 </div>
-
                 <div class="form-field">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password">
@@ -33,43 +41,9 @@
                 </div>
             </form>
 
-            <?php if (isset($_SESSION['error_message'])): ?>
-
-                    <?php
-                    echo htmlspecialchars($_SESSION['error_message']);
-                    unset($_SESSION['error_message']);
-                    ?>
-                </p>
-
-            <div class="alert alert--warning">
-                <div class="alert__content">
-                <div class="alert__title">Info</div>
-                <div class="alert__message">
-                    <p>
-                    <?php
-                    echo htmlspecialchars($_SESSION['error_message']);
-                    unset($_SESSION['error_message']);
-                    ?>
-                    </p>
-
-
-
-                </div>
-
-
-
-                    </div>
-
-                </div>
-
-            <?php endif; ?>
-
-
         </main>
-        <!-- End .container -->
+
     </div>
-
-
     <script type="module" src="/assets/js/main.js"></script>
 </body>
 </html>
