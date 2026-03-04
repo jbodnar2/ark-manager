@@ -49,6 +49,12 @@ $csp .= "form-action 'self'; "; // Only allow forms to submit to same origin
 // $csp .= "script-src 'self' 'nonce-XYZ'; "; // Allow scripts from self that provide runtime nonce 'XYZ' (replace at runtime)
 // $csp .= "style-src 'self' 'nonce-XYZ'; ";  // Allow styles from self that provide runtime nonce 'XYZ'
 
+// Generate a unique nonce for this request (after session_start for randomness)
+$nonce = base64_encode(random_bytes(16));
+// Add to CSP (uncomment and adapt your commented lines)
+$csp .= "style-src 'self' 'nonce-$nonce'; "; // Allows external self + nonced inline styles
+// Optionally add for scripts if needed: $csp .= "script-src 'self' 'nonce-$nonce'; ";
+
 // NOT RECOMMENDED / DANGEROUS (commented out):
 // // $csp .= "default-src 'self' data:; "; // Avoid adding data: to default-src (too permissive)
 // // $csp .= "script-src 'unsafe-inline' 'self'; "; // Avoid 'unsafe-inline' for scripts (XSS risk)
@@ -56,6 +62,15 @@ $csp .= "form-action 'self'; "; // Only allow forms to submit to same origin
 
 // Send the effective CSP header
 header('Content-Security-Policy: ' . $csp); // Apply the assembled CSP
+
+// Make the nonce available for templates (e.g., store in a global or function)
+define('CSP_NONCE', $nonce); // Or use a function: function get_csp_nonce() { return CSP_NONCE; }
+
+/*
+ * <style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>">
+ *  Your inline CSS here
+ * </style>
+ */
 
 // Optional additional headers (enable if appropriate for your deployment):
 // header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload'); // HSTS: enforce HTTPS (only if site always on HTTPS)
