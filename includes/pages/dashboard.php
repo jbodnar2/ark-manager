@@ -1,7 +1,22 @@
 <?php require_once __DIR__ . '/../partials/head.php'; ?>
 
-    <header class="header"></header>
+    <header class="header">
+        <h1 class="header__title">Dashboard</h1>
+        <div class="header__userinfo">
+            <span class="userinfo__name">
+                <?= $_SESSION['user']['first_name'] .
+                    ' ' .
+                    $_SESSION['user']['last_name'] ?>
+            </span>
 
+            <span class="icon icon--search"></span>
+
+            <span class="userinfo__role">
+                <?= $_SESSION['user']['role'] ?>
+            </span>
+        </div>
+
+    </header>
 
     <div class="sidebar">
         <div class="logo">
