@@ -6,6 +6,7 @@ return [
         'login' => 'login.php',
     ],
     'protected' => [
+        'logout' => 'logout',
         'dashboard' => [
             'file' => 'dashboard.php',
             'role' => 'viewer',

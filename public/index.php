@@ -24,6 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         AuthController::login($db);
         exit();
     }
+
+    if ($request_route === 'logout') {
+        AuthController::logout();
+        exit();
+    }
 }
 
 $public_routes = $routes['public'];

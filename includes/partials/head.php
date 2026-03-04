@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../setup.php';
+require_once __DIR__ . '/../AuthController.php';
 ?>
 
 <!DOCTYPE html>
