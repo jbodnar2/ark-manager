@@ -4,6 +4,14 @@ declare(strict_types=1);
 // Start output buffering
 ob_start();
 
+// Auto flush as needed
+register_shutdown_function(function () {
+    if (ob_get_length()) {
+        ob_end_flush();
+    }
+    error_log('Shutdown ran!'); // Check your error log after a request
+});
+
 // 1. Load Configurations
 $config = require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/functions.php';
@@ -24,18 +32,17 @@ if ($config['app']['debug']) {
     error_reporting(0);
 }
 
-<?php
 // 3. Global Security Headers
 header('X-Frame-Options: DENY'); // Prevent this page being framed (clickjacking protection)
 header('X-Content-Type-Options: nosniff'); // Stop MIME type sniffing (reduces drive-by download risks)
 
 // Build a focused Content Security Policy (CSP)
-$csp  = "default-src 'self'; ";        // Default: allow resources only from same origin
-$csp .= "img-src 'self' data:; ";      // Allow images from same-origin and data: URIs (needed for CSS data-URI icons)
-$csp .= "object-src 'none'; ";         // Disallow <object>/<embed>/<applet> (blocks legacy plugin attack vectors)
-$csp .= "base-uri 'self'; ";           // Restrict <base> tag to same origin to prevent base href tampering
-$csp .= "frame-ancestors 'none'; ";    // Prevent this page from being framed by any origin (complements X-Frame-Options)
-$csp .= "form-action 'self'; ";        // Only allow forms to submit to same origin
+$csp = "default-src 'self'; "; // Default: allow resources only from same origin
+$csp .= "img-src 'self' data:; "; // Allow images from same-origin and data: URIs (needed for CSS data-URI icons)
+$csp .= "object-src 'none'; "; // Disallow <object>/<embed>/<applet> (blocks legacy plugin attack vectors)
+$csp .= "base-uri 'self'; "; // Restrict <base> tag to same origin to prevent base href tampering
+$csp .= "frame-ancestors 'none'; "; // Prevent this page from being framed by any origin (complements X-Frame-Options)
+$csp .= "form-action 'self'; "; // Only allow forms to submit to same origin
 
 // Optional: tighten script/style handling (recommended via nonces/hashes). Uncomment and use with care.
 // Note: using 'unsafe-inline' is discouraged — prefer nonces or hashes.
@@ -57,7 +64,6 @@ header('Content-Security-Policy: ' . $csp); // Apply the assembled CSP
 
 // If you want to test a CSP without blocking, use Report-Only (uncomment to enable):
 // header('Content-Security-Policy-Report-Only: ' . $csp . " report-uri /csp-report-endpoint;");
-
 
 // 4. Session & State Management
 

@@ -49,5 +49,7 @@ function validate_csrf(): void
             header('Location: /login');
             exit();
         }
+        // If we reach here, validation succeeded—regenerate for anti-replay
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 }
