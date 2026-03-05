@@ -65,10 +65,42 @@
     --z-index-modal: 1500;
     --z-index-tooltip: 3000;
 
+    /* Shadows */
+    /*--shadow-bottom-sm: 0 1px 2px 0 oklch(0% 0 0 / 0.05);
+    --shadow-bottom-sm-right: 1px 0 2px 0 oklch(0% 0 0 / 0.05);
+
+    --shadow-bottom-lg:
+        0 10px 15px -3px oklch(0% 0 0 / 0.1),
+        0 4px 6px -2px oklch(0% 0 0 / 0.05);*/
+
+    /* small (sm) */
+    --shadow-top-sm: 0 -1px 2px 0 oklch(0% 0 0 / 0.05);
     --shadow-bottom-sm: 0 1px 2px 0 oklch(0% 0 0 / 0.05);
+    --shadow-right-sm: 1px 0 2px 0 oklch(0% 0 0 / 0.05);
+    --shadow-left-sm: -1px 0 2px 0 oklch(0% 0 0 / 0.05);
+
+    /* large (lg) */
+    --shadow-top-lg:
+        0 -10px 15px -3px oklch(0% 0 0 / 0.1),
+        0 -4px 6px -2px oklch(0% 0 0 / 0.05);
+
     --shadow-bottom-lg:
         0 10px 15px -3px oklch(0% 0 0 / 0.1),
         0 4px 6px -2px oklch(0% 0 0 / 0.05);
+
+    --shadow-right-lg:
+        10px 0 15px -3px oklch(0% 0 0 / 0.1),
+        4px 0 6px -2px oklch(0% 0 0 / 0.05);
+
+    --shadow-left-lg:
+        -10px 0 15px -3px oklch(0% 0 0 / 0.1),
+        -4px 0 6px -2px oklch(0% 0 0 / 0.05);
+
+    /* logical aliases */
+    --shadow-inline-start-sm: var(--shadow-left-sm);
+    --shadow-inline-end-sm: var(--shadow-right-sm);
+    --shadow-inline-start-lg: var(--shadow-left-lg);
+    --shadow-inline-end-lg: var(--shadow-right-lg);
 
     /* 4. Color Primitives */
     --color-neutral-50: oklch(98.46% 0.0017 247.8);

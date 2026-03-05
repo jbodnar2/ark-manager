@@ -4,13 +4,13 @@
 
     .main-grid {
         display: grid;
-        grid-template-columns: minmax(200px, max-content) 1fr;   /* sidebar + content */
-        grid-template-rows: auto 1fr auto;                     /* header, main area, footer */
-        grid-template-areas:                                   /* named areas (must be exact) */
+        grid-template-columns: minmax(200px, max-content) 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
             "header header"
             "sidebar main"
             "footer footer";
-        min-height: 100vh;                                     /* let grid fill the viewport */
+        min-height: 100vh;
         width: 100%;
     }
 
@@ -41,6 +41,7 @@
 
     .sidebar {
         grid-area: sidebar;
+
     }
 
     .logo__img {
@@ -63,8 +64,13 @@
         gap: var(--space-xl);
     }
 
-    .sidebar__form {
+    .sidebar__form.logout-form {
         margin-block-start: auto;
+        align-self: flex-start;
+    }
+
+    .logout-form__button {
+        text-decoration: underline;
     }
 
     </style>
@@ -124,9 +130,9 @@
                 <?php endif; ?>
             </ul>
         </nav>
-        <form action="/logout" class="sidebar__form sidebar__form--logout" method="POST">
+        <form action="/logout" class="sidebar__form logout-form" method="POST">
             <?php echo csrf_field(); ?>
-            <input type="submit" value="Logout">
+            <input type="submit" value="Logout" class="logout-form__button btn btn--ghost">
         </form>
     </div>
 
