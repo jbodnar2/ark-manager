@@ -2,76 +2,6 @@
 
     <style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>">
 
-    .main-grid {
-        display: grid;
-        grid-template-columns: minmax(200px, max-content) 1fr;
-        grid-template-rows: auto 1fr auto;
-        grid-template-areas:
-            "header header"
-            "sidebar main"
-            "footer footer";
-        min-height: 100vh;
-        width: 100%;
-    }
-
-    .header, .sidebar {
-        background-color: var(--color-white);
-        padding: var(--space-md);
-    }
-
-    .userinfo__name::after {
-        content: " | " ;
-    }
-
-
-    .header {
-        grid-area: header; /* place the header into the top row spanning both columns */
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .group {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--space-sm);
-        margin-inline-start: var(--space-md);
-    }
-
-    .sidebar {
-        grid-area: sidebar;
-
-    }
-
-    .logo__img {
-        height: 1.5rem;
-    }
-
-    .main {
-        grid-area: main;
-    }
-
-    .footer {
-        grid-area: footer;
-    }
-
-    .sidebar {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        gap: var(--space-xl);
-    }
-
-    .sidebar__form.logout-form {
-        margin-block-start: auto;
-        align-self: flex-start;
-    }
-
-    .logout-form__button {
-        text-decoration: underline;
-    }
 
     </style>
 
@@ -108,14 +38,9 @@
                     <a href="/dashboard" class="nav__link">Dashboard</a>
                 </li>
                 <?php endif; ?>
-                <?php if (AuthController::hasRole('user')): ?>
-                <li class="nav__item">
-                    <a href="/arks" class="nav__link">Manage ARKs</a>
-                </li>
-                <?php endif; ?>
                 <?php if (AuthController::hasRole('admin')): ?>
                 <li class="nav__item">
-                    <a href="/shoulders" class="nav__link">Manage Shoulders</a>
+                    <a href="/users" class="nav__link">Manage Users</a>
                 </li>
                 <?php endif; ?>
                 <?php if (AuthController::hasRole('admin')): ?>
@@ -125,7 +50,12 @@
                 <?php endif; ?>
                 <?php if (AuthController::hasRole('admin')): ?>
                 <li class="nav__item">
-                    <a href="/users" class="nav__link">Manage Users</a>
+                    <a href="/shoulders" class="nav__link">Manage Shoulders</a>
+                </li>
+                <?php endif; ?>
+                <?php if (AuthController::hasRole('user')): ?>
+                <li class="nav__item">
+                    <a href="/arks" class="nav__link">Manage ARKs</a>
                 </li>
                 <?php endif; ?>
             </ul>
@@ -137,7 +67,19 @@
     </div>
 
 
-    <main class="main"></main>
+    <main class="main">
+
+        <div class="surface">
+
+        <table>
+            <thead>
+                <caption>Table Title</caption>
+            </thead>
+            <tbody></tbody>
+        </table>
+        </div>
+
+    </main>
 
 
     <footer class="footer"></footer>

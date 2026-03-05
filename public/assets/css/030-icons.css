@@ -63,6 +63,22 @@
     vertical-align: middle;
 }
 
+.icon-sm {
+    font-size: var(--icon-size-sm);
+}
+
+.icon-md {
+    font-size: var(--icon-size-md);
+}
+
+.icon-lg {
+    font-size: var(--icon-size-lg);
+}
+
+.icon-xl {
+    font-size: var(--icon-size-xl);
+}
+
 /* 2. ICON TRIGGER (For Clickable Icons like Info/Help) */
 .icon-trigger {
     appearance: none;
