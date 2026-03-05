@@ -31,13 +31,20 @@
         align-items: center;
     }
 
+    .group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-sm);
+        margin-inline-start: var(--space-md);
+    }
+
     .sidebar {
         grid-area: sidebar;
     }
 
     .logo__img {
-
-        height: 4rem;
+        height: 1.5rem;
     }
 
     .main {
@@ -49,7 +56,6 @@
     }
 
     .sidebar {
-
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -61,28 +67,13 @@
         margin-block-start: auto;
     }
 
-    .group {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 2rem;
-        margin-inline-start: 1rem;
-    }
-
-
-
-
-
     </style>
 
     <div class="main-grid">
 
     <header class="header">
         <div class="group">
-        <div class="sidebar__logo">
-            <img src="/assets/img/trees.svg" alt="" class="logo__img">
-        </div>
-        <h1 class="header__title">Dashboard</h1>
+        <h1 class="header__title"><span class="icon icon--shield"></span> Dashboard</h1>
         </div>
         <div class="header__userinfo">
 
