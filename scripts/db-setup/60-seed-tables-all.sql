@@ -204,6 +204,17 @@ VALUES
         'active',
         1,
         'Tests slow response.'
+    ),
+    (
+        6,
+        2,
+        '8841',
+        'ark:/12345/s18898',
+        'Test of Self',
+        'https://manager.test',
+        'active',
+        1,
+        'Just a test'
     );
 
 -- 4.2 Administrative States
