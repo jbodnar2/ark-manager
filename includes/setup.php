@@ -115,3 +115,9 @@ try {
     error_log($e->getMessage());
     exit('Error: Unable to connect to the database.');
 }
+
+require_once __DIR__ . '/UserRepository.php';
+require_once __DIR__ . '/AuthController.php';
+
+$userRepo = new UserRepository($db);
+$auth = new AuthController($userRepo);

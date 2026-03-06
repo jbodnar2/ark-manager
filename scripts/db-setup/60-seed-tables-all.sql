@@ -73,6 +73,18 @@ VALUES
         'viewer',
         NULL,
         '2026-02-01 14:20:00'
+    ),
+    (
+        6,
+        'inactive_1',
+        'Ben',
+        'Franklin',
+        'ben-franklin@thegoblinking.org',
+        -- inactive_password
+        '$argon2id$v=19$m=65536,t=4,p=1$Ggo2/AUjvnlIS87v22tsAw$nD6ffoxbJDyTZW39QFYVgaCpMPoWk6j5Q4UsPV+i8JQ',
+        'inactive',
+        NULL,
+        '2026-03-06 14:20:00'
     );
 
 COMMIT;

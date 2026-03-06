@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/setup.php';
 require_once __DIR__ . '/../includes/Router.php';
-require_once __DIR__ . '/../includes/AuthController.php';
 
 $routes = require_once __DIR__ . '/../includes/routes.php';
 $base_path = $config['app']['root'];
@@ -13,27 +12,31 @@ $request_route = Router::getCleanPath(
     'error404',
 );
 
-if ($request_route === 'logout') {
-    AuthController::logout();
-    exit();
-}
+// Don't allow GET logouts
+// if ($request_route === 'logout') {
+//     $auth->logout();
+//     exit();
+// }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validate_csrf();
     if ($request_route === 'auth') {
-        AuthController::login($db);
+        $username = $_POST['username'] ?? '';
+        $password = $_POST['password'] ?? '';
+
+        $auth->login($username, $password);
         exit();
     }
 
     if ($request_route === 'logout') {
-        AuthController::logout();
+        $auth->logout();
         exit();
     }
 }
 
 $public_routes = $routes['public'];
 $protected_routes = $routes['protected'];
-$is_logged_in = AuthController::isLoggedIn();
+$is_logged_in = $auth->isLoggedIn($userRepo);
 
 if (array_key_exists($request_route, $public_routes)) {
     $target = $public_routes[$request_route];
@@ -49,7 +52,7 @@ if (array_key_exists($request_route, $protected_routes)) {
 
     $route_info = $protected_routes[$request_route];
 
-    if (!AuthController::hasRole($route_info['role'])) {
+    if (!$auth->hasRole($route_info['role'])) {
         http_response_code(403);
         require_once Router::getVerifiedPagePath($base_path, 'error-403.php');
         exit();

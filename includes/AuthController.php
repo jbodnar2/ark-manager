@@ -3,79 +3,95 @@ declare(strict_types=1);
 
 class AuthController
 {
-    public static function login(PDO $db): void
+    private UserRepository $userRepo;
+
+    public function __construct(UserRepository $userRepo)
     {
-        $username = $_POST['username'] ?? '';
-        $password = $_POST['password'] ?? '';
-
-        $sql =
-            'SELECT password_hash, first_name, last_name, role FROM users WHERE username = :user LIMIT 1';
-        $stmt = $db->prepare($sql);
-
-        $stmt->execute(['user' => $username]);
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['password_hash'])) {
-            session_regenerate_id(true);
-
-            $_SESSION['user'] = [
-                'username' => $username,
-                'last_login' => time(),
-                'first_name' => $user['first_name'],
-                'last_name' => $user['last_name'],
-                'role' => $user['role'],
-                'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            ];
-
-            header('Location: /dashboard');
-            exit();
-        } else {
-            $_SESSION['error']['message'] = 'Invalid username or password';
-            $_SESSION['error']['attempts'] =
-                ($_SESSION['error']['attempts'] ?? 0) + 1;
-
-            header('Location: /login');
-            exit();
-        }
+        $this->userRepo = $userRepo;
     }
 
-    public static function isLoggedIn()
+    public function login(string $username, string $password): void
     {
-        if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
+        $user = $this->userRepo->findByUsername($username);
+
+        // Verify password and ensure the account is not inactive
+        if (
+            $user &&
+            $user['role'] !== 'inactive' &&
+            password_verify($password, $user['password_hash'])
+        ) {
+            $this->startUserSession($user);
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $this->handleLoginFailure();
+    }
+
+    private function startUserSession(array $user): void
+    {
+        session_regenerate_id(true);
+        $_SESSION['user'] = [
+            'id' => $user['id'],
+            'username' => $user['username'],
+            'first_name' => $user['first_name'],
+            'last_name' => $user['last_name'],
+            'role' => $user['role'],
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+            'last_login' => time(),
+        ];
+    }
+
+    private function handleLoginFailure(): void
+    {
+        $_SESSION['error'] = [
+            'message' => 'Invalid credentials or inactive account.',
+            'attempts' => ($_SESSION['error']['attempts'] ?? 0) + 1,
+        ];
+        header('Location: /login');
+        exit();
+    }
+
+    // public static function isLoggedIn(): bool
+    public function isLoggedIn($userRepo): bool
+    {
+        if (!isset($_SESSION['user']['id'])) {
             return false;
         }
 
-        $current_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-        $stored_ip = $_SESSION['user']['ip'] ?? '';
+        $currentAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+        $storedAgent = $_SESSION['user']['user_agent'];
 
-        if ($current_ip !== $stored_ip) {
-            self::logout();
+        if ($currentAgent !== $storedAgent) {
+            $this->logout();
+            return false;
+        }
+
+        $user = $userRepo->findById((int) $_SESSION['user']['id']);
+
+        if (!$user || $user['role'] === 'inactive') {
+            $_SESSION = [];
             return false;
         }
 
         return true;
     }
 
-    public static function hasRole(string $required_role): bool
+    public function hasRole(string $requiredRole): bool
     {
-        $user_role = $_SESSION['user']['role'] ?? 'unknown';
+        $userRole = $_SESSION['user']['role'] ?? 'unknown';
 
-        if ($required_role === 'admin') {
-            return $user_role === 'admin';
-        }
+        $hierarchy = [
+            'viewer' => ['viewer', 'user', 'admin'],
+            'user' => ['user', 'admin'],
+            'admin' => ['admin'],
+        ];
 
-        if ($required_role === 'user') {
-            return in_array($user_role, ['admin', 'user']);
-        }
-
-        if ($required_role === 'viewer') {
-            return in_array($user_role, ['admin', 'user', 'viewer']);
-        }
-
-        return false;
+        return in_array($userRole, $hierarchy[$requiredRole] ?? [], true);
     }
 
-    public static function logout(): void
+    public function logout(): void
     {
         $_SESSION = [];
         if (ini_get('session.use_cookies')) {
