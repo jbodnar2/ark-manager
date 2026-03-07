@@ -53,7 +53,7 @@ class AuthController
         exit();
     }
 
-    public function isLoggedIn($userRepo): bool
+    public function isLoggedIn(): bool
     {
         if (!isset($_SESSION['user']['id'])) {
             return false;
@@ -67,7 +67,7 @@ class AuthController
             return false;
         }
 
-        $user = $userRepo->findById((int) $_SESSION['user']['id']);
+        $user = $this->userRepo->findById((int) $_SESSION['user']['id']);
 
         if (!$user || $user['role'] === 'inactive') {
             $_SESSION = [];

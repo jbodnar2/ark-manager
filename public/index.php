@@ -18,7 +18,7 @@ $request_route = Router::getCleanPath(
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validate_csrf();
     if ($request_route === 'auth') {
-        $username = $_POST['username'] ?? '';
+        $username = trim($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
 
         $auth->login($username, $password);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$is_logged_in = $auth->isLoggedIn($userRepo);
+$is_logged_in = $auth->isLoggedIn();
 
 if (array_key_exists($request_route, $public_routes)) {
     $target = $public_routes[$request_route]['file'] ?? null;

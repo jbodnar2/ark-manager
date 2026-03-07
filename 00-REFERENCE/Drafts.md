@@ -1,3 +1,168 @@
+Revised Guidance – Database Organisation and Auth Refactor1. Ways to organise database logic
+
+1.  Functions in one file
+
+- Pros: Quick to write; no OOP learning required.
+- Cons: Pollutes global namespace; hard to test; becomes tangled as the project grows.
+
+2. Single DB controller class
+
+Pros: Keeps code inside a class; allows PDO injection.
+Cons: Grows into a “God object”; violates single‑responsibility principle; hard to navigate after a few hundred lines.
+
+3️⃣ Separate repository classes (recommended)
+
+Pros: Clear boundaries; easy to locate logic; highly testable; scales well.
+Cons: Requires initial OOP setup and a small amount of boilerplate.
+
+Recommendation: adopt the repository pattern (Option 3). It yields the cleanest architecture and prepares the project for future growth.
+
+2. Problems with the current AuthController
+
+Direct use of $\_POST and $\_SESSION couples the class to a web request, making unit testing difficult.
+All methods are static, preventing dependency injection and mocking.
+The class mixes database access, password verification, session handling, and HTTP redirects.
+Hard‑coded redirects tie the logic to a specific UI flow and block reuse in APIs.
+
+3. Suggested architecture
+
+Database connection – a small Database class or factory that returns a configured PDO instance.
+Repository classes – one per entity.
+
+UserRepository – CRUD for the users table.
+ArkRepository – CRUD for the arks table.
+NaanRepository – CRUD for naans and related tables.
+
+Service classes – contain business logic and coordinate repositories.
+
+AuthService – validates credentials, creates the session, decides redirects.
+
+Example: UserRepository.php
+
+<?php
+declare(strict_types=1);
+
+class UserRepository
+{
+    private PDO $db;
+
+    public function __construct(PDO $db)
+    {
+        $this->db = $db;
+    }
+
+    public function findById(int $id): ?array
+    {
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE id = :id');
+        $stmt->execute([':id' => $id]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
+    public function findByUsername(string $username): ?array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM users WHERE username = :u LIMIT 1'
+        );
+        $stmt->execute([':u' => $username]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+}
+Refactored AuthController.php
+<?php
+declare(strict_types=1);
+
+class AuthController
+{
+    public static function login(UserRepository $userRepo): void
+    {
+        $username = $_POST['username'] ?? '';
+        $password = $_POST['password'] ?? '';
+
+        $user = $userRepo->findByUsername($username);
+
+        if ($user && password_verify($password, $user['password_hash'])) {
+            // session handling
+            $_SESSION['user'] = [
+                'id'         => $user['id'],
+                'username'   => $user['username'],
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            ];
+            // redirect after successful login
+            header('Location: /dashboard');
+            exit();
+        }
+
+        // failed login – stay on login page with error flag
+        header('Location: /login?error=1');
+        exit();
+    }
+}
+The controller now delegates all data access to the repository and focuses only on authentication flow.
+
+4. Wiring everything in setup.php and index.php
+setup.php
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/Database.php';
+require_once __DIR__ . '/UserRepository.php';
+require_once __DIR__ . '/ArkRepository.php';
+require_once __DIR__ . '/NaanRepository.php';
+
+$db = Database::connect();               // returns PDO
+$userRepo = new UserRepository($db);
+$arkRepo  = new ArkRepository($db);
+$naanRepo = new NaanRepository($db);
+All repository objects are now available to any script that includes setup.php.
+index.php (router excerpt)
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/../includes/setup.php';
+require_once __DIR__ . '/../includes/AuthController.php';
+
+$request = Router::getCleanPath($_SERVER['REQUEST_URI'] ?? '', 'error404');
+
+if ($request === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    AuthController::login($userRepo);
+    exit();
+}
+
+/* other route handling … */
+Because setup.php runs before the router, the $userRepo variable is already instantiated and ready for use.
+
+5. Frequently asked questions
+
+
+Why “Repository”?
+It abstracts the persistence mechanism. Controllers ask the repository for a user; they never see raw SQL. Changing the database engine later only requires edits inside the repository.
+
+
+Do I need to create a repository on every page?
+No. Initialise them once in setup.php. Since index.php includes setup.php, the objects persist for the duration of the request.
+
+
+Will this add a lot of boilerplate?
+Initially yes, but the resulting code is far easier to read, test, and extend.
+
+
+
+6. Action items
+
+Create repository files – UserRepository.php, ArkRepository.php, NaanRepository.php. Move the corresponding functions from your current operations file into methods.
+Refactor AuthController – replace raw SQL calls with calls to UserRepository. Keep only authentication flow in the controller.
+Update setup.php – instantiate the PDO connection and each repository. Export the objects for the router.
+Modify index.php – pass the appropriate repository (or a service) to controller methods instead of the raw $db.
+(Optional) Add an autoloader – register a simple PSR‑4 loader so you no longer need manual require_once for each class.
+
+Proceed in the order listed. After completion the application will have a clear separation of concerns, be easier to test, and scale without the “God object” problems you are currently facing. Let me know which step you want to start with, and I’ll supply the exact code you need.
+
+
+---
+
+
 I'm working on an application and I have a file of database operations that I've written. I'd like (or am wondering if I should) wwrap it in a single Class sort of DB controller or if I should separate it ito separate files or just use the functions directly by include the entire file? Can you review the functionas ans let me know what different options might be and which migt work best:
 
 ---
