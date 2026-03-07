@@ -36,7 +36,8 @@ $is_logged_in = $auth->isLoggedIn($userRepo);
 if (array_key_exists($request_route, $public_routes)) {
     $target = $public_routes[$request_route]['file'] ?? null;
 
-    Router::getVerifiedPagePath($base_path, $target);
+    $page = Router::getVerifiedPagePath($base_path, $target);
+    require_once $page;
     exit();
 }
 
@@ -50,15 +51,18 @@ if (array_key_exists($request_route, $protected_routes)) {
 
     if (!$auth->hasRole($route_info['role'])) {
         http_response_code(403);
-        require_once Router::getVerifiedPagePath($base_path, 'error-403.php');
+        $page = Router::getVerifiedPagePath($base_path, 'error-403.php');
+        require_once $page;
         exit();
     }
 
     $target = $route_info['file'];
-    require_once Router::getVerifiedPagePath($base_path, $target);
+    $page = Router::getVerifiedPagePath($base_path, $target);
+    require_once $page;
     exit();
 }
 
 http_response_code(404);
-require_once Router::getVerifiedPagePath($base_path, 'error-404.php');
+$page = Router::getVerifiedPagePath($base_path, 'error-404.php');
+require_once $page;
 exit();
