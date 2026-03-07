@@ -53,7 +53,6 @@ class AuthController
         exit();
     }
 
-    // public static function isLoggedIn(): bool
     public function isLoggedIn($userRepo): bool
     {
         if (!isset($_SESSION['user']['id'])) {

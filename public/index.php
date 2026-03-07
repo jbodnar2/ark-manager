@@ -4,19 +4,16 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/setup.php';
 require_once __DIR__ . '/../includes/Router.php';
 
-$routes = require_once __DIR__ . '/../includes/routes.php';
 $base_path = $config['app']['root'];
+
+$routes = require_once __DIR__ . '/../includes/routes.php';
+$public_routes = $routes['public'];
+$protected_routes = $routes['protected'];
 
 $request_route = Router::getCleanPath(
     $_SERVER['REQUEST_URI'] ?? '',
     'error404',
 );
-
-// Don't allow GET logouts
-// if ($request_route === 'logout') {
-//     $auth->logout();
-//     exit();
-// }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validate_csrf();
@@ -34,13 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$public_routes = $routes['public'];
-$protected_routes = $routes['protected'];
 $is_logged_in = $auth->isLoggedIn($userRepo);
 
 if (array_key_exists($request_route, $public_routes)) {
-    $target = $public_routes[$request_route];
-    require_once Router::getVerifiedPagePath($base_path, $target);
+    $target = $public_routes[$request_route]['file'] ?? null;
+
+    Router::getVerifiedPagePath($base_path, $target);
     exit();
 }
 

@@ -2,11 +2,10 @@
 
 return [
     'public' => [
-        '' => 'login.php',
-        'login' => 'login.php',
+        '' => ['file' => 'login.php'],
+        'login' => ['file' => 'login.php'],
     ],
     'protected' => [
-        'logout' => 'logout',
         'dashboard' => [
             'file' => 'dashboard.php',
             'role' => 'viewer',
