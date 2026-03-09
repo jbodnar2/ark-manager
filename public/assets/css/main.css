@@ -101,6 +101,10 @@
     text-decoration: underline;
 }
 
-.surface {
-    background-color: var(--bg-surface);
+.card-surface {
+    background-color: var(--color-bg-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-lg);
+    margin: var(--space-lg);
 }

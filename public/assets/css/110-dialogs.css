@@ -35,6 +35,9 @@ dialog::backdrop {
 
 .dialog__header {
     border-bottom: var(--border-width-sm) solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .dialog__content {

@@ -112,6 +112,13 @@ class UserRepository
         return $stmt->fetchAll();
     }
 
+    public function getAllUsers(): array
+    {
+        $sql =
+            'SELECT id, email, username, first_name, last_name, role FROM users ORDER BY id';
+        return $this->db->query($sql)->fetchAll();
+    }
+
     public function setUserRole(int $userid, string $role): bool
     {
         $allowedRoles = [

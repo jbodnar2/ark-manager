@@ -14,6 +14,17 @@ return [
             'file' => 'manage-users.php',
             'role' => 'admin',
         ],
+        [
+            'add-user' => [
+                'controller' => 'UserController',
+                'action' => 'store',
+                'role' => 'admin',
+            ],
+            'logout' => [
+                'controller' => 'AuthController',
+                'action' => 'logout',
+            ],
+        ],
         'naans' => [
             'file' => 'manage-naans.php',
             'role' => 'admin',
