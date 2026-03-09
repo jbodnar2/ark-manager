@@ -1,3 +1,287 @@
+To refactor your application into a maintainable Controller-Service-Repository architecture, follow these instructions. This setup ensures your `index.php` remains small and your business logic is separated from your database and routing logic.
+
+---
+
+## 1. Create the `AuthService`
+
+**File:** `src/Services/AuthService.php`
+
+**Purpose:** Move the "logic" of authentication here. Remove all `header()` and `exit()` calls so this service can be reused anywhere.
+
+- Rename your existing `AuthController` class to `AuthService`.
+- Update the `login` method to `authenticate`, returning `true` or `false` instead of redirecting.
+- Retain `isLoggedIn`, `hasRole`, and session management methods.
+
+---
+
+## 2. Create the `UserController`
+
+**File:** `src/Controllers/UserController.php`
+
+**Purpose:** Handle the HTTP request for user management. This replaces the large `if` block in your `index.php`.
+
+```php
+class UserController
+{
+    private UserRepository $userRepo;
+    private AuthService $auth;
+
+    public function __construct(UserRepository $userRepo, AuthService $auth)
+    {
+        $this->userRepo = $userRepo;
+        $this->auth = $auth;
+    }
+
+    public function store(): void
+    {
+        if (!$this->auth->isLoggedIn() || !$this->auth->hasRole('admin')) {
+            http_response_code(403);
+            exit('Forbidden');
+        }
+
+        // Logic moved from index.php
+        $first = trim($_POST['first_name'] ?? '');
+        $last = trim($_POST['last_name'] ?? '');
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $role = $_POST['role'] ?? 'user';
+        $password = $_POST['password'] ?? '';
+        $confirm = $_POST['confirm_pwd'] ?? '';
+
+        if ($password !== $confirm) {
+            $_SESSION['error_message'] = 'Passwords do not match.';
+            header('Location: /users');
+            exit();
+        }
+
+        try {
+            $this->userRepo->createUser(
+                $username,
+                $first,
+                $last,
+                $email,
+                $password,
+                $role,
+            );
+            $_SESSION['success_message'] = 'User created successfully.';
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = $e->getMessage();
+        }
+
+        header('Location: /users');
+        exit();
+    }
+}
+```
+
+---
+
+## 3. Create the `AuthController`
+
+**File:** `src/Controllers/AuthController.php`
+
+**Purpose:** Handle the login and logout HTTP requests.
+
+```php
+class AuthController
+{
+    private AuthService $auth;
+
+    public function __construct(AuthService $auth)
+    {
+        $this->auth = $auth;
+    }
+
+    public function login(): void
+    {
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        if ($this->auth->authenticate($username, $password)) {
+            header('Location: /dashboard');
+        } else {
+            $_SESSION['error_message'] = 'Invalid credentials.';
+            header('Location: /login');
+        }
+        exit();
+    }
+
+    public function logout(): void
+    {
+        $this->auth->logout(); // This handles session destruction
+        header('Location: /login');
+        exit();
+    }
+}
+```
+
+---
+
+## 4. Update the Routing Map
+
+**File:** `includes/routes.php`
+
+**Purpose:** Map URLs to their respective controllers and methods.
+
+- Add a `controller` key and an `action` key to your route definitions.
+- Example for `add-user`: `['controller' => 'UserController', 'action' => 'store', 'role' => 'admin']`.
+
+---
+
+## 5. Simplify `index.php`
+
+**File:** `public/index.php`
+
+**Purpose:** Acting as the Front Controller, it initializes dependencies and dispatches to the correct class.
+
+1. **Initialize Dependencies:**
+
+```php
+$userRepo = new UserRepository($pdo);
+$authService = new AuthService($userRepo);
+```
+
+2. **Dispatch Logic:**
+
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    validate_csrf();
+
+    $route_info =
+        $protected_routes[$request_route] ??
+        ($public_routes[$request_route] ?? null);
+
+    if ($route_info && isset($route_info['controller'])) {
+        $className = $route_info['controller'];
+        $method = $route_info['action'];
+
+        require_once __DIR__ . "/../src/Controllers/{$className}.php";
+
+        // Basic dependency injection
+        if ($className === 'UserController') {
+            $controller = new UserController($userRepo, $authService);
+        } else {
+            $controller = new AuthController($authService);
+        }
+
+        $controller->$method();
+        exit();
+    }
+}
+```
+
+---
+
+## 6. Summary of Responsibility Changes
+
+| File               | Responsibility                                               |
+| ------------------ | ------------------------------------------------------------ |
+| **index.php**      | Routing and dependency setup only.                           |
+| **Routes.php**     | Configuration of which URL goes to which method.             |
+| **Controllers**    | Read `$_POST`, call Services/Repos, and `header()` redirect. |
+| **AuthService**    | Logic for sessions, password checks, and role hierarchy.     |
+| **UserRepository** | Pure SQL execution and data integrity.                       |
+
+Would you like me to provide a template for the `AuthService` rewrite to ensure no redirects remain in the logic layer?
+
+---
+
+To ensure your refactor is successful, follow these structured instructions to separate your concerns. This transition moves your application from a single procedural script to an organized Model-View-Controller (MVC) structure.
+
+---
+
+## 1. Modify `UserRepository.php`
+
+Ensure this file remains a **Data Access Layer**.
+
+- **Keep:** All SQL queries, `password_hash` logic, and data validation (like `verifyUniqueEmail`).
+- **Avoid:** Do not add `header()`, `$_SESSION`, or `exit()` calls here.
+
+---
+
+## 2. Create `AuthService.php`
+
+**Path:** `src/Services/AuthService.php`
+
+This is your **Business Logic Layer**. It manages the "rules" of your application.
+
+- **Extract Logic:** Move the session management and role hierarchy logic from your old `AuthController` here.
+- **Remove Redirects:** Change the `login` method to `authenticate(string $username, string $password): bool`. It should return `true` on success and `false` on failure, leaving the redirection to the Controller.
+- **Encapsulate State:** Keep `isLoggedIn()` and `hasRole()` here so they can be injected into any Controller that needs to verify permissions.
+
+---
+
+## 3. Create the Controllers
+
+Controllers handle the **HTTP Layer**. They receive the request, talk to a Service or Repository, and return a response (a redirect or a view).
+
+### `UserController.php`
+
+**Path:** `src/Controllers/UserController.php`
+
+- **Constructor:** Accept `UserRepository` and `AuthService`.
+- **Method `store()`:** Move the `add-user` logic here.
+- Check `auth->hasRole('admin')`.
+- Validate `$_POST` data.
+- Call `userRepo->createUser()`.
+- Set the flash message in `$_SESSION`.
+- Redirect using `header('Location: /users')`.
+
+### `AuthController.php`
+
+**Path:** `src/Controllers/AuthController.php`
+
+- **Method `login()`:** Call `authService->authenticate()`. If true, redirect to `/dashboard`. If false, set an error message and redirect to `/login`.
+- **Method `logout()`:** Call `authService->logout()` and redirect to `/`.
+
+---
+
+## 4. Update `routes.php`
+
+Update your array to map paths to the new Class and Method structure.
+
+```php
+return [
+    'protected' => [
+        'users' => ['file' => 'manage-users.php', 'role' => 'admin'],
+        'add-user' => [
+            'controller' => 'UserController',
+            'action' => 'store',
+            'role' => 'admin',
+        ],
+    ],
+    'public' => [
+        'auth' => ['controller' => 'AuthController', 'action' => 'login'],
+    ],
+];
+```
+
+---
+
+## 5. Refactor `index.php`
+
+Your entry point should now follow a simple flow: **Initialize -> Route -> Dispatch**.
+
+1. **Initialize:** Create your PDO instance, `UserRepository`, and `AuthService`.
+2. **Route:** Match the `$_SERVER['REQUEST_URI']` to your `$routes` array.
+3. **Dispatch:** \* If the route has a `controller` and `action`, instantiate that class and call the method.
+
+- Example: `$controller = new $route['controller']($userRepo, $authService);`
+- Example: `$method = $route['action']; $controller->$method();`
+
+---
+
+## Checklist for Success
+
+- [ ] No `header()` calls exist in `AuthService` or `UserRepository`.
+- [ ] All `$_POST` reading happens inside Controller methods.
+- [ ] `index.php` no longer contains specific logic for `add-user` or `login`.
+- [ ] CSRF validation is still called in `index.php` before dispatching any POST request.
+
+Would you like me to provide the full code for the updated `index.php` dispatcher logic to ensure it handles these new classes correctly?
+
+---
+
 Revised Guidance – Database Organisation and Auth Refactor1. Ways to organise database logic
 
 1.  Functions in one file
