@@ -56,6 +56,7 @@ class AuthService
             return false;
         }
 
+        // Is this too many calls to check on every page load?
         $user = $this->userRepo->findById((int) $_SESSION['user']['id']);
 
         if (!$user || $user['role'] === 'inactive') {

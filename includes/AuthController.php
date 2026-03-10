@@ -18,7 +18,7 @@ class AuthController
         if ($this->authService->authenticate($username, $password)) {
             $_SESSION['success_message'] = 'Login successful.';
 
-            $_SESSION['error_message'] = '';
+            unset($_SESSION['error_message']);
 
             header('Location: /dashboard');
         } else {
