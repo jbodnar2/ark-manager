@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // 7. Authorization Layer: Check Roles for Protected Routes
 if (!$is_public) {
-    $required_role = $route_info['role'] ?? 'user';
+    $required_role = $route_info['role'] ?? 'viewer';
 
     if (!$authService->hasRole($required_role)) {
         http_response_code(403);
