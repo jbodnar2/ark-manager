@@ -3,110 +3,35 @@ declare(strict_types=1);
 
 class AuthController
 {
-    private UserRepository $userRepo;
+    private AuthService $authService;
 
-    public function __construct(UserRepository $userRepo)
+    public function __construct(AuthService $authService)
     {
-        $this->userRepo = $userRepo;
+        $this->authService = $authService;
     }
 
-    public function login(string $username, string $password): void
+    public function login(): void
     {
-        $user = $this->userRepo->findByUsername($username);
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
 
-        // Verify password and ensure the account is not inactive
-        if (
-            $user &&
-            $user['role'] !== 'inactive' &&
-            password_verify($password, $user['password_hash'])
-        ) {
-            $this->startUserSession($user);
+        if ($this->authService->authenticate($username, $password)) {
+            $_SESSION['success_message'] = 'Login successful.';
+
+            $_SESSION['error_message'] = '';
+
             header('Location: /dashboard');
-            exit();
+        } else {
+            $_SESSION['error_message'] = 'Invalid username or password.';
+            header('Location: /login');
         }
-
-        $this->handleLoginFailure();
-    }
-
-    private function startUserSession(array $user): void
-    {
-        session_regenerate_id(true);
-        $_SESSION['user'] = [
-            'id' => $user['id'],
-            'username' => $user['username'],
-            'first_name' => $user['first_name'],
-            'last_name' => $user['last_name'],
-            'role' => $user['role'],
-            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-            'last_login' => time(),
-        ];
-    }
-
-    private function handleLoginFailure(): void
-    {
-        $_SESSION['error'] = [
-            'message' => 'Invalid credentials or inactive account.',
-            'attempts' => ($_SESSION['error']['attempts'] ?? 0) + 1,
-        ];
-        header('Location: /login');
         exit();
-    }
-
-    public function isLoggedIn(): bool
-    {
-        if (!isset($_SESSION['user']['id'])) {
-            return false;
-        }
-
-        $currentAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-        $storedAgent = $_SESSION['user']['user_agent'];
-
-        if ($currentAgent !== $storedAgent) {
-            $this->logout();
-            return false;
-        }
-
-        $user = $this->userRepo->findById((int) $_SESSION['user']['id']);
-
-        if (!$user || $user['role'] === 'inactive') {
-            $_SESSION = [];
-            return false;
-        }
-
-        return true;
-    }
-
-    public function hasRole(string $requiredRole): bool
-    {
-        $userRole = $_SESSION['user']['role'] ?? 'unknown';
-
-        $hierarchy = [
-            'viewer' => ['viewer', 'user', 'admin'],
-            'user' => ['user', 'admin'],
-            'admin' => ['admin'],
-        ];
-
-        return in_array($userRole, $hierarchy[$requiredRole] ?? [], true);
     }
 
     public function logout(): void
     {
-        $_SESSION = [];
-        if (ini_get('session.use_cookies')) {
-            $params = session_get_cookie_params();
-            setcookie(
-                session_name(),
-                '',
-                time() - 42000,
-                $params['path'],
-                $params['domain'],
-                $params['secure'],
-                $params['httponly'],
-            );
-        }
-        session_destroy();
-        header('Location: /');
+        $this->authService->logout();
+        header('Location: /login');
         exit();
     }
 }

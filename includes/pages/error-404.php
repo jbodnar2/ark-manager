@@ -7,7 +7,8 @@
 </head>
 <body>
 
-    <h1>NOT FOUND PAGE</h1>
+    <h1>Error 404</h1>
+    <p>Page not found</p>
 
 </body>
 </html>

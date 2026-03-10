@@ -17,120 +17,60 @@ $request_route = Router::getCleanPath(
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validate_csrf();
-    if ($request_route === 'auth') {
-        $username = trim($_POST['username'] ?? '');
-        $password = $_POST['password'] ?? '';
 
-        $auth->login($username, $password);
-        exit();
-    }
+    $route_info = $protected_routes[$request_route] ?? ($public_routes ?? null);
 
-    if ($request_route === 'add-user') {
-        // Admin-only route (protected routes check runs for GET later,
-        // so ensure the user is logged in & authorized)
-        if (!$auth->isLoggedIn() || !$auth->hasRole('admin')) {
-            http_response_code(403);
-            exit('Forbidden');
+    if (
+        $route_info &&
+        isset($route_info['controller'], $route_info['action'])
+    ) {
+        $className = $route_info['controller'];
+        $method = $route_info['action'];
+
+        require_once __DIR__ . "/../includes/{$className}.php";
+
+        if ($className === 'UserController') {
+            $controller = new UserController($userRepo, $authService);
+        } else {
+            $controller = new AuthController($authService);
         }
 
-        // Collect and validate input
-        $first = trim($_POST['first_name'] ?? '');
-        $last = trim($_POST['last_name'] ?? '');
-        $username = trim($_POST['username'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $role = $_POST['role'] ?? 'user';
-        $password = $_POST['password'] ?? '';
-        $confirm = $_POST['confirm_pwd'] ?? '';
-
-        // Basic server-side validations
-        if (
-            $first === '' ||
-            $last === '' ||
-            $username === '' ||
-            $email === '' ||
-            $password === '' ||
-            $confirm === ''
-        ) {
-            $_SESSION['error_message'] = 'All fields are required.';
-            header('Location: /users');
-            exit();
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['error_message'] = 'Invalid email address.';
-            header('Location: /users');
-            exit();
-        }
-
-        if ($password !== $confirm) {
-            $_SESSION['error_message'] = 'Passwords do not match.';
-            header('Location: /users');
-            exit();
-        }
-
-        if (strlen($password) < 8) {
-            $_SESSION['error_message'] =
-                'Password must be at least 8 characters.';
-            header('Location: /users');
-            exit();
-        }
-
-        // Attempt to create the user, the repository will throw on duplicates/invalid role/email
-        try {
-            $newId = $userRepo->createUser(
-                $username,
-                $first,
-                $last,
-                $email,
-                $password,
-                $role,
-            );
-            $_SESSION['success_message'] = 'User created successfully.';
-        } catch (InvalidArgumentException $e) {
-            $_SESSION['error_message'] = $e->getMessage();
-        } catch (PDOException $e) {
-            error_log('DB error creating user: ' . $e->getMessage());
-            $_SESSION['error_message'] = 'Unable to create user at this time.';
-        }
-
-        // PRG pattern
-        header('Location: /users');
-        exit();
-    }
-
-    if ($request_route === 'logout') {
-        $auth->logout();
-        exit();
+        $controller->$method();
     }
 }
 
-$is_logged_in = $auth->isLoggedIn();
+$is_logged_in = $authService->isLoggedIn();
+$is_public_route = array_key_exists($request_route, $public_routes);
+$is_protected_route = array_key_exists($request_route, $protected_routes);
 
-if (array_key_exists($request_route, $public_routes)) {
+// Everyone can access public routes, regardless
+if ($is_public_route) {
     $target = $public_routes[$request_route]['file'] ?? null;
 
     $page = Router::getVerifiedPagePath($base_path, $target);
+
     require_once $page;
     exit();
 }
 
-if (array_key_exists($request_route, $protected_routes)) {
-    if (!$is_logged_in) {
-        header('Location: /login');
-        exit();
-    }
+if (!$is_logged_in && !$is_public_route) {
+    header('Location: /login');
+    exit();
+}
 
+if ($is_logged_in && $is_protected_route) {
     $route_info = $protected_routes[$request_route];
+    $has_required_role = $authService->hasRole($route_info['role']);
 
-    if (!$auth->hasRole($route_info['role'])) {
-        http_response_code(403);
-        $page = Router::getVerifiedPagePath($base_path, 'error-403.php');
+    if ($has_required_role) {
+        $target = $route_info['file'];
+        $page = Router::getVerifiedPagePath($base_path, $target);
         require_once $page;
         exit();
     }
 
-    $target = $route_info['file'];
-    $page = Router::getVerifiedPagePath($base_path, $target);
+    http_response_code(403);
+    $page = Router::getVerifiedPagePath($base_path, 'error-403.php');
     require_once $page;
     exit();
 }

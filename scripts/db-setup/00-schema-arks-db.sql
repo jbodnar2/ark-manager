@@ -8,10 +8,13 @@ PRAGMA journal_mode = WAL;
 -- 1. Users
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
-    username TEXT NOT NULL UNIQUE COLLATE NOCASE,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    username TEXT NOT NULL UNIQUE COLLATE NOCASE CHECK (length (trim(username)) >= 3),
+    first_name TEXT NOT NULL CHECK (length (trim(first_name)) > 0),
+    last_name TEXT NOT NULL CHECK (length (trim(last_name)) > 0),
+    email TEXT NOT NULL UNIQUE COLLATE NOCASE CHECK (
+        length (trim(email)) > 3
+        AND email LIKE '%@%.%'
+    ),
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('admin', 'user', 'viewer', 'inactive')),
     deactivated_at TEXT DEFAULT NULL,
@@ -56,7 +59,7 @@ CREATE TABLE IF NOT EXISTS arks (
         AND assigned_name NOT GLOB '*[^A-Za-z0-9._-]*'
     ),
     full_ark TEXT NOT NULL UNIQUE COLLATE NOCASE,
-    title TEXT NOT NULL,
+    title TEXT NOT NULL CHECK (length (trim(title)) > 0),
     target_url TEXT,
     creator TEXT,
     local_id TEXT,

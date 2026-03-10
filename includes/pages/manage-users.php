@@ -25,23 +25,23 @@
     <div class="sidebar">
         <nav class="sidebar__nav">
             <ul class="nav__list">
-                <?php if ($auth->hasRole('viewer')): ?>
+                <?php if ($authService->hasRole('viewer')): ?>
                 <li class="nav__item">
                     <a href="/dashboard" class="nav__link">Dashboard</a>
                 </li>
-                <?php endif; ?> <?php if ($auth->hasRole('admin')): ?>
+                <?php endif; ?> <?php if ($authService->hasRole('admin')): ?>
                 <li class="nav__item">
                     <a href="/users" class="nav__link">Manage Users</a>
                 </li>
-                <?php endif; ?> <?php if ($auth->hasRole('admin')): ?>
+                <?php endif; ?> <?php if ($authService->hasRole('admin')): ?>
                 <li class="nav__item">
                     <a href="/naans" class="nav__link">Manage NAANs</a>
                 </li>
-                <?php endif; ?> <?php if ($auth->hasRole('admin')): ?>
+                <?php endif; ?> <?php if ($authService->hasRole('admin')): ?>
                 <li class="nav__item">
                     <a href="/shoulders" class="nav__link">Manage Shoulders</a>
                 </li>
-                <?php endif; ?> <?php if ($auth->hasRole('user')): ?>
+                <?php endif; ?> <?php if ($authService->hasRole('user')): ?>
                 <li class="nav__item">
                     <a href="/arks" class="nav__link">Manage ARKs</a>
                 </li>

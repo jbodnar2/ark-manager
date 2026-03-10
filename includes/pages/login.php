@@ -25,15 +25,15 @@
             </div>
             <?php endif; ?>
 
-            <form action="/auth" method="post">
+            <form action="/login" method="post">
                 <?php csrf_field(true); ?>
                 <div class="form-field">
                     <label for="username">User Name</label>
-                    <input type="text" name="username" id="username">
+                    <input type="text" name="username" id="username" value="admin_1">
                 </div>
                 <div class="form-field">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password">
+                    <input type="password" name="password" id="password" value="admin_password">
                 </div>
                 <div class="form-field d-flex flex-row gap-xl">
                     <input class="btn btn--primary btn--lg" type="submit" value="login">

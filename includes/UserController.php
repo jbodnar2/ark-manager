@@ -4,18 +4,22 @@ declare(strict_types=1);
 class UserController
 {
     private UserRepository $userRepo;
-    private $auth;
+    private AuthService $authService;
 
-    public function __construct(UserRepository $userRepo, $auth)
-    {
+    public function __construct(
+        UserRepository $userRepo,
+        AuthService $authService,
+    ) {
         $this->userRepo = $userRepo;
-        $this->auth = $auth;
+        $this->authService = $authService;
     }
 
     public function store(): void
     {
-        // 1. Authorization check
-        if (!$this->auth->isLoggedIn() || !$this->auth->hasRole('admin')) {
+        if (
+            !$this->authService->isLoggedIn() ||
+            !$this->authService->hasRole('admin')
+        ) {
             http_response_code(403);
             exit('Forbidden');
         }
@@ -50,10 +54,10 @@ class UserController
         } catch (InvalidArgumentException $e) {
             $_SESSION['error_message'] = $e->getMessage();
         } catch (PDOException $e) {
-            $_SESSION['error_message'] = 'A database error occurred.';
+            // $_SESSION['error_message'] = 'A database error occurred.';
+            $_SESSION['error_message'] = $e->getMessage();
         }
 
-        // 5. Response/Redirect
         header('Location: /users');
         exit();
     }
