@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Manager Login</h1>
+            <h1><?= $page_title ?></h1>
         </header>
 
         <main class="main">
@@ -25,7 +25,7 @@
             </div>
             <?php endif; ?>
 
-            <form action="/login" method="post">
+            <form action="/" method="post">
                 <?php csrf_field(true); ?>
                 <div class="form-field">
                     <label for="username">User Name</label>

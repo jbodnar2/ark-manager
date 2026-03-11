@@ -117,9 +117,9 @@ try {
 }
 
 require_once __DIR__ . '/UserRepository.php';
-// require_once __DIR__ . '/AuthController.php';
 require_once __DIR__ . '/AuthService.php';
 // require_once __DIR__ . '/UserController.php';
+// require_once __DIR__ . '/AuthController.php';
 
 $userRepo = new UserRepository($db);
 $authService = new AuthService($userRepo);

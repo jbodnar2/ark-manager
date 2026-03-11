@@ -10,28 +10,40 @@ class AuthController
         $this->authService = $authService;
     }
 
+    private const DEFAULT_TITLE = 'ARK Manager Login';
+
+    public function showLoginForm(): void
+    {
+        if ($this->authService->isLoggedIn()) {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $page_title = self::DEFAULT_TITLE;
+        require_once __DIR__ . '/pages/login.php';
+    }
+
     public function login(): void
     {
         $username = trim($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
 
         if ($this->authService->authenticate($username, $password)) {
-            $_SESSION['success_message'] = 'Login successful.';
-
-            unset($_SESSION['error_message']);
-
             header('Location: /dashboard');
-        } else {
-            $_SESSION['error_message'] = 'Invalid username or password.';
-            header('Location: /login');
+            exit();
         }
+
+        $page_title = self::DEFAULT_TITLE;
+        $error = 'Invalid username or password';
+
+        require_once __DIR__ . '/pages/login.php';
         exit();
     }
 
     public function logout(): void
     {
         $this->authService->logout();
-        header('Location: /login');
+        header('Location: /');
         exit();
     }
 }

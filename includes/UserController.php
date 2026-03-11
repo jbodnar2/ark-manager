@@ -14,6 +14,12 @@ class UserController
         $this->authService = $authService;
     }
 
+    public function index(): void
+    {
+        $users = $this->userRepo->getUsers();
+        require_once __DIR__ . '/pages/manage-users.php';
+    }
+
     public function store(): void
     {
         if (
