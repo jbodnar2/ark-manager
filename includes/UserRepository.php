@@ -10,6 +10,40 @@ class UserRepository
     private const ROLE_VIEWER = 'viewer';
     private const ROLE_INACTIVE = 'inactive';
 
+    private function getAllowedRoles()
+    {
+        return [
+            self::ROLE_ADMIN,
+            self::ROLE_USER,
+            self::ROLE_VIEWER,
+            self::ROLE_INACTIVE,
+        ];
+    }
+
+    /**
+     * Ensures the provided role is valid.
+     * * @param string $role The role string to check.
+     * @param bool $allowActive Whether the 'active' logical filter is permitted.
+     * @throws InvalidArgumentException If the role is not recognized.
+     */
+    private function validateRole(string $role, bool $allowActive = false): void
+    {
+        $allowed = [
+            self::ROLE_ADMIN,
+            self::ROLE_USER,
+            self::ROLE_VIEWER,
+            self::ROLE_INACTIVE,
+        ];
+
+        if ($allowActive && $role === 'active') {
+            return;
+        }
+
+        if (!in_array($role, $allowed, true)) {
+            throw new InvalidArgumentException("Invalid role: {$role}");
+        }
+    }
+
     public function __construct(PDO $db)
     {
         $this->db = $db;
@@ -24,7 +58,7 @@ class UserRepository
      * @param string $firstName
      * @param string $lastName
      * @param string $email
-     * @param string $password Plain text password
+     * @param string $password
      * @param string $role
      * @return int New user ID
      */
@@ -48,15 +82,7 @@ class UserRepository
             throw new InvalidArgumentException($emailCheck['error']);
         }
 
-        $allowedRoles = [
-            self::ROLE_ADMIN,
-            self::ROLE_USER,
-            self::ROLE_VIEWER,
-            self::ROLE_INACTIVE,
-        ];
-        if (!in_array($role, $allowedRoles, true)) {
-            throw new InvalidArgumentException("Invalid role: {$role}.");
-        }
+        $this->validateRole($role);
 
         // Using Argon2id for password hashing
         $passwordHash = password_hash($password, PASSWORD_ARGON2ID);
@@ -112,11 +138,38 @@ class UserRepository
         return $stmt->fetchAll();
     }
 
-    public function getAllUsers(): array
+    public function getAllUsersOLD(bool $show_inactive = true): array
     {
         $sql =
             'SELECT id, email, username, first_name, last_name, role FROM users ORDER BY id';
         return $this->db->query($sql)->fetchAll();
+    }
+
+    public function getAllUsers(?string $role = null): array
+    {
+        $allowedRoles = $this->getAllowedRoles();
+
+        if ($role !== null) {
+            $this->validateRole($role, true);
+        }
+
+        $sql =
+            'SELECT id, username, first_name, last_name, email, role FROM users';
+        $params = [];
+
+        if ($role === 'active') {
+            $sql .= ' WHERE role != :inactive';
+            $params[':inactive'] = self::ROLE_INACTIVE;
+        } elseif ($role != null) {
+            $sql .= ' WHERE role = :role';
+            $params[':role'] = $role;
+        }
+
+        $sql .= ' ORDER BY last_name ASC';
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
 
     public function setUserRole(int $userid, string $role): bool

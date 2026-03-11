@@ -1,4 +1,5 @@
 <?php require_once __DIR__ . '/../partials/head.php'; ?>
+<! -- // TODO: Allow editing, deleting user. -->
 
 <style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>"></style>
 
@@ -59,17 +60,24 @@
     </div>
 
     <main class="main">
-        <?php if (!empty($_SESSION['success_message'])): ?>
-        <div class="flash flash--success">
-            <?= htmlspecialchars($_SESSION['success_message'], ENT_QUOTES) ?>
+        <?php if (!empty($_SESSION['add-user']['success_message'])): ?>
+        <div class="alert alert--success">
+            <?= htmlspecialchars(
+                $_SESSION['add-user']['success_message'],
+                ENT_QUOTES,
+            ) ?>
         </div>
-        <?php unset($_SESSION['success_message']); ?> <?php endif; ?> <?php if (
-     !empty($_SESSION['error_message'])
- ): ?>
-        <div class="flash flash--error">
-            <?= htmlspecialchars($_SESSION['error_message'], ENT_QUOTES) ?>
+        <?php unset(
+            $_SESSION['add-user']['success_message'],
+        ); ?> <?php endif; ?>
+        <?php if (!empty($_SESSION['add-user']['error_message'])): ?>
+        <div class="alert alert--error">
+            <?= htmlspecialchars(
+                $_SESSION['add-user']['error_message'],
+                ENT_QUOTES,
+            ) ?>
         </div>
-        <?php unset($_SESSION['error_message']); ?> <?php endif; ?>
+        <?php unset($_SESSION['add-user']['error_message']); ?> <?php endif; ?>
 
         <div class="card-surface">
             <button
@@ -177,10 +185,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $users = $userRepo->getAllUsers(); ?> <?php foreach (
-     $users
-     as $user
- ): ?>
+                    <?php $users = $userRepo->getAllUsers(); ?>
+                    <?php foreach ($users as $user): ?>
                     <tr>
                         <td>
                             <?= htmlspecialchars(

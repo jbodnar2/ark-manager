@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
         AND email LIKE '%@%.%'
     ),
     password_hash TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('admin', 'user', 'viewer', 'inactive')),
+    role TEXT NOT NULL DEFAULT 'viewer' CHECK (role IN ('admin', 'user', 'viewer', 'inactive')),
     deactivated_at TEXT DEFAULT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -331,5 +331,29 @@ INSERT INTO
     arks_audit_log (ark_id, action, old_value, changed_by_name)
 VALUES
     (OLD.id, 'DELETE', OLD.full_ark, 'System/Unknown');
+
+END;
+
+-- User Deactivation Timestamp
+CREATE TRIGGER IF NOT EXISTS trg_users_set_deactivated_at AFTER
+UPDATE OF role ON users WHEN NEW.role = 'inactive'
+AND OLD.role != 'inactive' BEGIN
+UPDATE users
+SET
+    deactivated_at = CURRENT_TIMESTAMP
+WHERE
+    id = NEW.id;
+
+END;
+
+-- Users Clear Deactivation Timestamp
+CREATE TRIGGER IF NOT EXISTS trg_users_clear_deactivated_at AFTER
+UPDATE OF role ON users WHEN NEW.role != 'inactive'
+AND OLD.role = 'inactive' BEGIN
+UPDATE users
+SET
+    deactivated_at = NULL
+WHERE
+    id = NEW.id;
 
 END;

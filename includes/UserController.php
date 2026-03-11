@@ -50,12 +50,13 @@ class UserController
                 $password,
                 $role,
             );
-            $_SESSION['success_message'] = 'User created successfully.';
+            $_SESSION['add-user']['success_message'] =
+                'User created successfully.';
         } catch (InvalidArgumentException $e) {
-            $_SESSION['error_message'] = $e->getMessage();
+            $_SESSION['add-user']['error_message'] = $e->getMessage();
         } catch (PDOException $e) {
-            // $_SESSION['error_message'] = 'A database error occurred.';
-            $_SESSION['error_message'] = $e->getMessage();
+            $_SESSION['add-user']['error_message'] =
+                'A database error occurred.';
         }
 
         header('Location: /users');

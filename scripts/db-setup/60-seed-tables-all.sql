@@ -82,10 +82,21 @@ VALUES
         'ben-franklin@thegoblinking.org',
         -- inactive_password
         '$argon2id$v=19$m=65536,t=4,p=1$Ggo2/AUjvnlIS87v22tsAw$nD6ffoxbJDyTZW39QFYVgaCpMPoWk6j5Q4UsPV+i8JQ',
-        'inactive',
+        'viewer',
         NULL,
         '2026-03-06 14:20:00'
     );
+
+COMMIT;
+
+-- Set User Inactive - test deactivated_at trigger
+BEGIN TRANSACTION;
+
+UPDATE users
+SET
+    role = 'inactive'
+WHERE
+    id = 6;
 
 COMMIT;
 
