@@ -12,7 +12,7 @@ class AuthController
 
     private const DEFAULT_TITLE = 'ARK Manager Login';
 
-    public function showLoginForm(): void
+    public function showLogin(): void
     {
         if ($this->authService->isLoggedIn()) {
             header('Location: /dashboard');

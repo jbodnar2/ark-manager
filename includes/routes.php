@@ -5,7 +5,7 @@ return [
         '' => [
             'GET' => [
                 'controller' => 'AuthController',
-                'action' => 'showLoginForm',
+                'action' => 'showLogin',
             ],
             'POST' => ['controller' => 'AuthController', 'action' => 'login'],
         ],
@@ -13,7 +13,12 @@ return [
     ],
     'protected' => [
         'dashboard' => [
-            'GET' => ['file' => 'dashboard.php', 'role' => 'viewer'],
+            // 'GET' => ['file' => 'dashboard.php', 'role' => 'viewer'],
+            'GET' => [
+                'controller' => 'DashboardController',
+                'action' => 'showDashboard',
+                'role' => 'viewer',
+            ],
         ],
         'logout' => [
             'POST' => ['controller' => 'AuthController', 'action' => 'logout'],
