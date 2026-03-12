@@ -16,16 +16,14 @@
         <div class="header__userinfo">
 
             <span class="userinfo__name">
-                <?= $_SESSION['user']['first_name'] .
-                    ' ' .
-                    $_SESSION['user']['last_name'] ?>
+                <?= $user['first_name'] . ' ' . $user['last_name'] ?>
             </span>
 
 
 
 
             <span class="userinfo__role">
-                <?= $_SESSION['user']['role'] ?>
+                <?= $user['role'] ?>
             </span>
         </div>
 
