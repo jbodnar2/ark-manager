@@ -2,6 +2,11 @@
    080-TABLES.CSS
    ========================================================================== */
 
+/*
+   Enable horizontal scrolling. Note: For this to work within
+   a grid layout, the ancestor .grid-item must have min-width: 0
+   to prevent the layout from expanding to the table's full width.
+*/
 .table-container {
     max-width: 100%;
     min-width: 0;
@@ -21,9 +26,9 @@ table {
 }
 
 caption {
-    padding: var(--space-sm);
     font-weight: var(--font-weight-bold);
-    text-align: left;
+    font-size: var(--font-size-base);
+    text-align: inherit;
     color: var(--color-text-secondary);
 }
 
@@ -39,7 +44,9 @@ thead th {
 }
 
 /* Cell Styles */
-td {
+td,
+th,
+caption {
     padding: var(--space-sm) var(--space-md);
     border-bottom: var(--border-width-sm) solid var(--color-border);
     color: var(--color-text-primary);

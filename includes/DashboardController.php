@@ -6,7 +6,7 @@ class DashboardController
 {
     private AuthService $authService;
 
-    private const DEFAULT_PAGE_TITLE = 'Dashboard';
+    private const DEFAULT_PAGE_TITLE = 'ARK Manager Dashboard';
 
     // TODO: Consider moving get/post to controlers (away from routes)
     // public function handleRequest()

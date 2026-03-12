@@ -78,6 +78,13 @@
 
 .main {
     grid-area: main;
+    /*
+    Explicitly set min-width to 0 to override the grid item's default
+    min-width: auto (minimum content size). This allows this item
+    and its descendants, like the table, to shrink and trigger
+    overflow scrolling.
+    */
+    min-width: 0;
 }
 
 .footer {

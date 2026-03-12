@@ -13,7 +13,6 @@ return [
     ],
     'protected' => [
         'dashboard' => [
-            // 'GET' => ['file' => 'dashboard.php', 'role' => 'viewer'],
             'GET' => [
                 'controller' => 'DashboardController',
                 'action' => 'getView',
@@ -23,7 +22,8 @@ return [
         'users' => [
             'GET' => [
                 'controller' => 'UserController',
-                'action' => '',
+                'action' => 'getView',
+                'role' => 'admin',
             ],
         ],
         'logout' => [

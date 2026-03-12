@@ -11,7 +11,7 @@
 
     <header class="header">
         <div class="group">
-        <h1 class="header__title"><span class="icon icon--shield"></span> Dashboard</h1>
+        <h1 class="header__title"><span class="icon icon--shield"></span> <?= $page_title ?></h1>
         </div>
         <div class="header__userinfo">
 

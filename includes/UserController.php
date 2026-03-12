@@ -14,10 +14,39 @@ class UserController
         $this->authService = $authService;
     }
 
-    public function index(): void
+    private const DEFAULT_PAGE_TITLE = 'Manage Users';
+
+    // TODO: Consider moving get/post to controlers (away from routes)
+    // public function handleRequest()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $this->getView();
+    //     }
+
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         // Handle POST requests if needed in the future
+    //     }
+    // }
+
+    public function getView(): void
     {
-        $users = $this->userRepo->getUsers();
-        require_once __DIR__ . '/pages/manage-users.php';
+        // Get all the users
+        $users = $this->userRepo->getAllUsers();
+
+        // User display title
+        $user_display_title = 'All Active &amp; Inactive Users';
+
+        // Set the page title
+        $page_title = self::DEFAULT_PAGE_TITLE;
+
+        // Extract info about current user
+        $user = $_SESSION['user'] ?? [];
+        $is_admin = $this->authService->hasRole('admin');
+        $is_user = $this->authService->hasRole('user');
+        $is_viewer = $this->authService->hasRole('viewer');
+
+        // Load the view file
+        require_once __DIR__ . '/pages/users.php';
     }
 
     public function store(): void

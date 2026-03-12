@@ -138,12 +138,12 @@ class UserRepository
         return $stmt->fetchAll();
     }
 
-    public function getAllUsersOLD(bool $show_inactive = true): array
-    {
-        $sql =
-            'SELECT id, email, username, first_name, last_name, role FROM users ORDER BY id';
-        return $this->db->query($sql)->fetchAll();
-    }
+    // public function getAllUsersOLD(bool $show_inactive = true): array
+    // {
+    //     $sql =
+    //         'SELECT id, email, username, first_name, last_name, role FROM users ORDER BY id';
+    //     return $this->db->query($sql)->fetchAll();
+    // }
 
     public function getAllUsers(?string $role = null): array
     {
@@ -165,7 +165,8 @@ class UserRepository
             $params[':role'] = $role;
         }
 
-        $sql .= ' ORDER BY last_name ASC';
+        $sql .=
+            ' ORDER BY last_name ASC, CASE WHEN role = "inactive" THEN 1 ELSE 0 END ASC, role;';
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
