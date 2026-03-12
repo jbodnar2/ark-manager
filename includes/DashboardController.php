@@ -8,12 +8,24 @@ class DashboardController
 
     private const DEFAULT_PAGE_TITLE = 'Dashboard';
 
+    // TODO: Consider moving get/post to controlers (away from routes)
+    // public function handleRequest()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $this->getView();
+    //     }
+
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         // Handle POST requests if needed in the future
+    //     }
+    // }
+
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
 
-    public function showDashboard(): void
+    public function getView(): void
     {
         if (!$this->authService->isLoggedIn()) {
             header('Location: /');

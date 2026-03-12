@@ -41,12 +41,6 @@
                 </li>
                 <?php endif; ?>
 
-                <?php if ($is_user): ?>
-                <li class="nav__item">
-                    <a href="/arks" class="nav__link">Manage ARKs</a>
-                </li>
-                <?php endif; ?>
-
                 <?php if ($is_admin): ?>
                     <li class="nav__item">
                         <a href="/users" class="nav__link">Manage Users</a>
@@ -58,6 +52,13 @@
                         <a href="/shoulders" class="nav__link">Manage Shoulders</a>
                     </li>
                 <?php endif; ?>
+
+                <?php if ($is_user): ?>
+                <li class="nav__item">
+                    <a href="/arks" class="nav__link">Manage ARKs</a>
+                </li>
+                <?php endif; ?>
+
             </ul>
         </nav>
         <form action="/logout" class="sidebar__form logout-form" method="POST">

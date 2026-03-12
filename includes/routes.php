@@ -5,7 +5,7 @@ return [
         '' => [
             'GET' => [
                 'controller' => 'AuthController',
-                'action' => 'showLogin',
+                'action' => 'getView',
             ],
             'POST' => ['controller' => 'AuthController', 'action' => 'login'],
         ],
@@ -16,8 +16,14 @@ return [
             // 'GET' => ['file' => 'dashboard.php', 'role' => 'viewer'],
             'GET' => [
                 'controller' => 'DashboardController',
-                'action' => 'showDashboard',
+                'action' => 'getView',
                 'role' => 'viewer',
+            ],
+        ],
+        'users' => [
+            'GET' => [
+                'controller' => 'UserController',
+                'action' => '',
             ],
         ],
         'logout' => [
@@ -30,7 +36,7 @@ return [
 //     'public' => [
 //         '' => [
 //             'controller' => 'AuthController',
-//             'action' => 'showLoginForm',
+//             'action' => 'getViewForm',
 //         ],
 //         'login' => [
 //             'controller' => 'AuthController',
