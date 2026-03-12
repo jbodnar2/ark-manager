@@ -26,6 +26,34 @@ return [
                 'role' => 'admin',
             ],
         ],
+        'users/add' => [
+            'POST' => [
+                'controller' => 'UserController',
+                'action' => 'addUser',
+                'role' => 'admin',
+            ],
+        ],
+        'user/revoke-token' => [
+            'POST' => [
+                'controller' => 'UserController',
+                'action' => 'revokeUserToken',
+                'role' => 'admin',
+            ],
+        ],
+        'user/genrate-token' => [
+            'POST' => [
+                'controller' => 'UserController',
+                'action' => 'generateUserToken',
+                'role' => 'admin',
+            ],
+        ],
+        'api/user' => [
+            'GET' => [
+                'controller' => 'UserController',
+                'action' => 'getUserJSON',
+                'role' => 'admin',
+            ],
+        ],
         'logout' => [
             'POST' => ['controller' => 'AuthController', 'action' => 'logout'],
         ],

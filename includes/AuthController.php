@@ -12,18 +12,6 @@ class AuthController
 
     private const DEFAULT_TITLE = 'ARK Manager Login';
 
-    // TODO: Consider refactoring GET/POST handling to controller
-    // public function handleRequest()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    //         $this->getView();
-    //     }
-
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         $this->login();
-    //     }
-    // }
-
     public function getView(): void
     {
         if ($this->authService->isLoggedIn()) {

@@ -103,11 +103,45 @@ class UserRepository
         return (int) $this->db->lastInsertId();
     }
 
-    public function findById(int $id): ?array
+    public function findByToken(int $token): ?array
+    {
+        $sql = 'SELECT * FROM users WHERE api_token = :token LIMIT 1';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':tokdn' => $token]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function updateToken(int $user_id, string $token): bool
+    {
+        $sql = 'UPDATE users
+            SET api_token = :token,
+                api_token_issued = CURRENT_TIMESTAMP
+            WHERE id = :id';
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':token' => $token,
+            ':id' => $user_id,
+        ]);
+    }
+
+    public function revokeToken(int $user_id): bool
+    {
+        $sql = "UPDATE users
+                SET api_token = NULL,
+                    api_token_issued = NULL
+                WHERE id = :id";
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([':id' => $user_id]);
+    }
+
+    public function findById(int $user_id): ?array
     {
         $sql = 'SELECT * FROM users WHERE id = :id LIMIT 1';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([':id' => $user_id]);
         return $stmt->fetch() ?: null;
     }
 
@@ -138,13 +172,6 @@ class UserRepository
         return $stmt->fetchAll();
     }
 
-    // public function getAllUsersOLD(bool $show_inactive = true): array
-    // {
-    //     $sql =
-    //         'SELECT id, email, username, first_name, last_name, role FROM users ORDER BY id';
-    //     return $this->db->query($sql)->fetchAll();
-    // }
-
     public function getAllUsers(?string $role = null): array
     {
         $allowedRoles = $this->getAllowedRoles();
@@ -154,7 +181,7 @@ class UserRepository
         }
 
         $sql =
-            'SELECT id, username, first_name, last_name, email, role FROM users';
+            'SELECT id, username, first_name, last_name, email, role, api_token FROM users';
         $params = [];
 
         if ($role === 'active') {
@@ -173,7 +200,7 @@ class UserRepository
         return $stmt->fetchAll();
     }
 
-    public function setUserRole(int $userid, string $role): bool
+    public function setUserRole(int $user_id, string $role): bool
     {
         $allowedRoles = [
             self::ROLE_ADMIN,
@@ -195,11 +222,11 @@ class UserRepository
             ':role_check' => $role,
             ':inactive' => self::ROLE_INACTIVE,
             ':now' => date('Y-m-d H:i:s'),
-            ':id' => $userid,
+            ':id' => $user_id,
         ]) && $stmt->rowCount() > 0;
     }
 
-    public function verifyUniqueEmail(string $email, int $userid = 0): array
+    public function verifyUniqueEmail(string $email, int $user_id = 0): array
     {
         $email_trimmed = trim($email);
         if (
@@ -215,7 +242,7 @@ class UserRepository
 
         $sql = 'SELECT 1 FROM users WHERE email = :email AND id <> :id LIMIT 1';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $userid, ':email' => $email_trimmed]);
+        $stmt->execute([':id' => $user_id, ':email' => $email_trimmed]);
 
         if ($stmt->fetchColumn() !== false) {
             return [
@@ -228,10 +255,10 @@ class UserRepository
         return ['success' => true, 'error' => null, 'email' => $email_trimmed];
     }
 
-    public function updateUserInfo(int $userid, array $changes): bool
+    public function updateUserInfo(int $user_id, array $changes): bool
     {
         $allowedFields = ['email', 'first_name', 'last_name'];
-        $params = [':id' => $userid];
+        $params = [':id' => $user_id];
         $updates = [];
 
         foreach ($changes as $field => $new_value) {
@@ -244,7 +271,7 @@ class UserRepository
             }
 
             if ($field === 'email') {
-                $result = $this->verifyUniqueEmail($new_value, $userid);
+                $result = $this->verifyUniqueEmail($new_value, $user_id);
                 if (!$result['success']) {
                     throw new InvalidArgumentException($result['error']);
                 }

@@ -18,7 +18,12 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'viewer' CHECK (role IN ('admin', 'user', 'viewer', 'inactive')),
     deactivated_at TEXT DEFAULT NULL,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    api_token TEXT UNIQUE CHECK (
+        length (api_token) = 64
+        OR api_token IS NULL
+    ),
+    api_token_issued TEXT DEFAULT NULL
 );
 
 -- 2. NAANs (Name Assigning Authority Numbers)

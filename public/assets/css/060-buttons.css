@@ -105,6 +105,46 @@
     border-color: transparent;
 }
 
+/* Button Messaging States */
+
+.btn--info {
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+    border-color: var(--color-info);
+}
+
+.btn--info:hover,
+.btn--info:focus-visible {
+    background-color: var(--color-info);
+    color: var(--color-info-bg);
+    border-color: var(--color-info);
+}
+
+.btn--error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+    border-color: var(--color-error);
+}
+
+.btn--error::hover,
+.btn--error:focus-visible {
+    background-color: var(--color-error-text);
+    color: var(--color-error-bg);
+    border-color: var(--color-error);
+}
+
+.btn--warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+    border-color: var(--color-warning);
+}
+
+.btn--success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-color: var(--color-success);
+}
+
 /* 5. Cleanup for <a> Tags */
 a.btn:visited {
     color: inherit;

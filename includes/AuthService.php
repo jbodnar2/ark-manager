@@ -10,9 +10,13 @@ class AuthService
         $this->userRepo = $userRepo;
     }
 
+    public function isAuthorized(): bool
+    {
+        return $this->isLoggedIn() || $this->authenticateByToken();
+    }
+
     public function authenticate(string $username, string $password): bool
     {
-        $is_authenticated = false;
         $user = $this->userRepo->findByUsername($username);
 
         if (
@@ -20,15 +24,19 @@ class AuthService
             $user['role'] !== 'inactive' &&
             password_verify($password, $user['password_hash'])
         ) {
-            $is_authenticated = true;
             $this->startUserSession($user);
+            return true;
         }
 
-        return $is_authenticated;
+        return false;
     }
 
     private function startUserSession(array $user): void
     {
+        if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            session_regenerate_id(true);
+        }
+
         session_regenerate_id(true);
         $_SESSION['user'] = [
             'id' => $user['id'],
@@ -40,6 +48,26 @@ class AuthService
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
             'last_login' => time(),
         ];
+    }
+
+    private function authenticateByToken(): bool
+    {
+        $headers = getAllHeaders();
+
+        $authHeader =
+            $headers['Authorization'] ?? ($headers['authorization'] ?? '');
+
+        if (str_starts_with($authHeader, 'Bearer ')) {
+            $token = substr($authHeader, 7);
+            $user = $this->userRepo->findByToken($token);
+
+            if ($user && $user['role'] !== 'inactive') {
+                $this->startUserSession($user);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isLoggedIn(): bool
@@ -56,11 +84,11 @@ class AuthService
             return false;
         }
 
-        // Is this too many calls to check on every page load?
         $user = $this->userRepo->findById((int) $_SESSION['user']['id']);
 
         if (!$user || $user['role'] === 'inactive') {
             $_SESSION = [];
+            $this->logout();
             return false;
         }
 
@@ -95,6 +123,9 @@ class AuthService
                 $params['httponly'],
             );
         }
-        session_destroy();
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
     }
 }

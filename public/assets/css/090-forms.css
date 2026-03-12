@@ -176,3 +176,7 @@ input[type='radio'] {
     gap: var(--space-sm);
     margin-top: var(--space-md);
 }
+
+.table-cell--action__form {
+    display: inline-block;
+}

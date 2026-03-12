@@ -3,10 +3,6 @@
 
 <style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>">
 
-main {
-    display: flow-root;
-}
-
 </style>
 
 <div class="main-grid">
@@ -91,13 +87,13 @@ main {
             <button
                 class="btn btn--primary"
                 command="show-modal"
-                commandfor="add-user-form"
+                commandfor="user-form"
             >
                 Add User
             </button>
 
-            <dialog id="add-user-form">
-                <form action="add-user" method="post">
+            <dialog id="user-form">
+                <form action="users/add" method="POST">
                     <header class="dialog__header">
                         <h2>Add User</h2>
                     </header>
@@ -190,6 +186,8 @@ main {
                         <th>First Name</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th>API Token</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -214,6 +212,45 @@ main {
                         </td>
                         <td>
                             <?= htmlspecialchars($user['role'], ENT_QUOTES) ?>
+                        </td>
+                        <td>
+                            <?= htmlspecialchars(
+                                $user['api_token'] ?? '',
+                                ENT_QUOTES,
+                            ) ?>
+                        </td>
+                        <td class='table-cell--actions'>
+
+                            <?php if ($user['api_token']): ?>
+                            <form action="user/revoke-token" class="table-cell--action__form" method="post">
+                                <?php echo csrf_field(); ?>
+                                <input type="hidden" name="user_id" value="<?= $user[
+                                    'id'
+                                ] ?>" />
+                                <input type="submit" value="Delete Token" class="btn btn--info">
+                            </form>
+                            <?php endif; ?>
+
+                            <?php if (!$user['api_token']): ?>
+                            <form action="user/genrate-token" class="table-cell--action__form" method="post">
+                                <?php echo csrf_field(); ?>
+                                <input type="hidden" name="user_id" value="<?= $user[
+                                    'id'
+                                ] ?>" />
+                                <input type="submit" value="Get Token" class="btn btn--info">
+                            </form>
+                            <?php endif; ?>
+
+                            <button
+                                class="btn btn--info"
+                                command="show-modal"
+                                commandfor="user-form"
+                                data-id="<?= $user['id'] ?>"
+                            >
+                                Edit
+
+                            </button>
+
                         </td>
                     </tr>
                     <?php endforeach; ?>

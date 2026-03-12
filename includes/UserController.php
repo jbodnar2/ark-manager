@@ -16,18 +16,6 @@ class UserController
 
     private const DEFAULT_PAGE_TITLE = 'Manage Users';
 
-    // TODO: Consider moving get/post to controlers (away from routes)
-    // public function handleRequest()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    //         $this->getView();
-    //     }
-
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         // Handle POST requests if needed in the future
-    //     }
-    // }
-
     public function getView(): void
     {
         // Get all the users
@@ -49,7 +37,32 @@ class UserController
         require_once __DIR__ . '/pages/users.php';
     }
 
-    public function store(): void
+    public function getUserJSON(): void
+    {
+        $user_id = $_GET['id'] ?? null;
+
+        if (!$user_id) {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            echo json_encode(['error' => 'User ID is required']);
+            exit();
+        }
+
+        $user = $this->userRepo->findById((int) $user_id);
+
+        if (!$user) {
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['error' => 'User not found']);
+            exit();
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($user);
+        exit();
+    }
+
+    public function addUser(): void
     {
         if (
             !$this->authService->isLoggedIn() ||
@@ -92,6 +105,61 @@ class UserController
         } catch (PDOException $e) {
             $_SESSION['add-user']['error_message'] =
                 'A database error occurred.';
+        }
+
+        header('Location: /users');
+        exit();
+    }
+
+    public function generateUserToken(): void
+    {
+        if (
+            !$this->authService->isAuthorized() ||
+            !$this->authService->hasRole('admin')
+        ) {
+            http_response_code(403);
+            exit('Forbidden');
+        }
+
+        $user_id = (int) ($_POST['user_id'] ?? 0);
+
+        if ($user_id <= 0) {
+            $_SESSION['error_message'] = 'Invalid User ID.';
+            header('Location: /users');
+            exit();
+        }
+
+        $rawToken = bin2hex(random_bytes(32));
+
+        // 3. Save to Database
+        try {
+            $this->userRepo->updateToken($user_id, $rawToken);
+
+            // 4. Store in session ONLY ONCE to display to the admin
+            $_SESSION['new_api_token'] = [
+                'user_id' => $user_id,
+                'token' => $rawToken,
+            ];
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = 'Failed to generate token.';
+        }
+
+        header('Location: /users');
+        exit();
+    }
+
+    public function revokeUserToken(): void
+    {
+        if (!$this->authService->hasRole('admin')) {
+            http_response_code(403);
+            exit('Forbidden');
+        }
+
+        $user_id = (int) ($_POST['user_id'] ?? 0);
+
+        if ($user_id > 0) {
+            $this->userRepo->revokeToken($user_id);
+            $_SESSION['success_message'] = 'API token revoked successfully.';
         }
 
         header('Location: /users');

@@ -85,12 +85,14 @@ define('CSP_NONCE', $nonce); // Or use a function: function get_csp_nonce() { re
 // Set the SameSite attribute via ini_set to ensure compatibility
 ini_set('session.cookie_samesite', 'Lax');
 
-// Start session with basic functional options
-session_start([
-    'cookie_lifetime' => 86400,
-    'cookie_secure' => $config['app']['https_only'],
-    'cookie_httponly' => true,
-]);
+// Start session with basic options
+if (session_status() === PHP_SESSION_NONE) {
+    session_start([
+        'cookie_lifetime' => 86400,
+        'cookie_secure' => $config['app']['https_only'],
+        'cookie_httponly' => true,
+    ]);
+}
 
 ensure_csrf_token();
 
