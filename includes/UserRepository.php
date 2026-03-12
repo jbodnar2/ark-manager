@@ -103,11 +103,11 @@ class UserRepository
         return (int) $this->db->lastInsertId();
     }
 
-    public function findByToken(int $token): ?array
+    public function findByToken(string $token): ?array
     {
         $sql = 'SELECT * FROM users WHERE api_token = :token LIMIT 1';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':tokdn' => $token]);
+        $stmt->execute([':token' => $token]);
         return $stmt->fetch() ?: null;
     }
 

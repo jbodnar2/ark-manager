@@ -23,10 +23,22 @@ $entry =
 $route_info = $entry[$method] ?? $entry;
 
 $is_public = array_key_exists($request_route, $public_routes);
-$is_logged_in = $authService->isLoggedIn();
+// $is_logged_in = $authService->isLoggedIn();
+$is_authorized = $authService->isAuthorized();
 
-if (!$is_logged_in && !$is_public) {
-    header('Location: /');
+// if (!$is_logged_in && !$is_public) {
+//     header('Location: /');
+//     exit();
+// }
+
+if (!$is_authorized && !$is_public) {
+    if (str_starts_with($request_route, 'api/')) {
+        header('Content-Type: application/json');
+        http_response_code(401);
+        echo json_encode(['error' => 'Unauthorized']);
+    } else {
+        header('Location: /');
+    }
     exit();
 }
 
@@ -51,7 +63,13 @@ $target = $route_info['file'] ?? null;
 
 if ($className && $action) {
     if ($method === 'POST') {
-        validate_csrf();
+        $headers = array_change_key_case(getallheaders(), CASE_LOWER);
+        if (
+            !isset($headers['authorization']) ||
+            !str_starts_with($headers['authorization'], 'bearer ')
+        ) {
+            validate_csrf();
+        }
     }
 
     require_once __DIR__ . "/../includes/{$className}.php";

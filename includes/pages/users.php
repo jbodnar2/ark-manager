@@ -1,9 +1,7 @@
 <?php require_once __DIR__ . '/../partials/head.php'; ?>
 <! -- // TODO: Allow editing, deleting user. -->
 
-<style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>">
-
-</style>
+<style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>"></style>
 
 <div class="main-grid">
     <header class="header">
@@ -17,40 +15,32 @@
                 <?= $user['first_name'] . ' ' . $user['last_name'] ?>
             </span>
 
-            <span class="userinfo__role">
-                <?= $user['role'] ?>
-            </span>
+            <span class="userinfo__role"> <?= $user['role'] ?> </span>
         </div>
     </header>
 
     <div class="sidebar">
         <nav class="sidebar__nav">
             <ul class="nav__list">
-
                 <?php if ($is_viewer): ?>
                 <li class="nav__item">
                     <a href="/dashboard" class="nav__link">Dashboard</a>
                 </li>
-                <?php endif; ?>
-
-                <?php if ($is_admin): ?>
-                    <li class="nav__item">
-                        <a href="/users" class="nav__link">Manage Users</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="/naans" class="nav__link">Manage NAANs</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="/shoulders" class="nav__link">Manage Shoulders</a>
-                    </li>
-                <?php endif; ?>
-
-                <?php if ($is_user): ?>
+                <?php endif; ?> <?php if ($is_admin): ?>
+                <li class="nav__item">
+                    <a href="/users" class="nav__link">Manage Users</a>
+                </li>
+                <li class="nav__item">
+                    <a href="/naans" class="nav__link">Manage NAANs</a>
+                </li>
+                <li class="nav__item">
+                    <a href="/shoulders" class="nav__link">Manage Shoulders</a>
+                </li>
+                <?php endif; ?> <?php if ($is_user): ?>
                 <li class="nav__item">
                     <a href="/arks" class="nav__link">Manage ARKs</a>
                 </li>
                 <?php endif; ?>
-
             </ul>
         </nav>
         <form action="/logout" class="sidebar__form logout-form" method="POST">
@@ -73,8 +63,9 @@
         </div>
         <?php unset(
             $_SESSION['add-user']['success_message'],
-        ); ?> <?php endif; ?>
-        <?php if (!empty($_SESSION['add-user']['error_message'])): ?>
+        ); ?> <?php endif; ?> <?php if (
+     !empty($_SESSION['add-user']['error_message'])
+ ): ?>
         <div class="alert alert--error">
             <?= htmlspecialchars(
                 $_SESSION['add-user']['error_message'],
@@ -82,6 +73,24 @@
             ) ?>
         </div>
         <?php unset($_SESSION['add-user']['error_message']); ?> <?php endif; ?>
+        <?php if (isset($_SESSION['new_api_token'])): ?>
+        <div class="alert alert--success">
+            <div>
+                <div class="alert__title">New API Token Generated!</div>
+                <div class="alert__content">
+                    <p>
+                        Copy this token now. You will not be able to see it
+                        again:
+                    </p>
+                    <code
+                        ><?= htmlspecialchars(
+                            $_SESSION['new_api_token']['token'],
+                        ) ?></code
+                    >
+                </div>
+            </div>
+        </div>
+        <?php unset($_SESSION['new_api_token']); ?> <?php endif; ?>
 
         <div class="card-surface">
             <button
@@ -186,14 +195,13 @@
                         <th>First Name</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>API Token</th>
+                        <!--<th>API Token</th>-->
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($users as $user): ?>
                     <tr>
-
                         <td>
                             <?= htmlspecialchars(
                                 $user['last_name'],
@@ -213,31 +221,50 @@
                         <td>
                             <?= htmlspecialchars($user['role'], ENT_QUOTES) ?>
                         </td>
-                        <td>
-                            <?= htmlspecialchars(
-                                $user['api_token'] ?? '',
-                                ENT_QUOTES,
-                            ) ?>
-                        </td>
-                        <td class='table-cell--actions'>
-
+                        <!--<td>
+                            <?php
+                        // echo htmlspecialchars(
+                        // $user['api_token'] ?? '',
+                        // ENT_QUOTES,
+                        //);
+                        ?>
+                        </td>-->
+                        <td class="table-cell--actions">
                             <?php if ($user['api_token']): ?>
-                            <form action="user/revoke-token" class="table-cell--action__form" method="post">
+                            <form
+                                action="user/revoke-token"
+                                class="table-cell--action__form"
+                                method="post"
+                            >
                                 <?php echo csrf_field(); ?>
-                                <input type="hidden" name="user_id" value="<?= $user[
-                                    'id'
-                                ] ?>" />
-                                <input type="submit" value="Delete Token" class="btn btn--info">
+                                <input
+                                    type="hidden"
+                                    name="user_id"
+                                    value="<?= $user['id'] ?>"
+                                />
+                                <input
+                                    type="submit"
+                                    value="Delete Token"
+                                    class="btn btn--info"
+                                />
                             </form>
-                            <?php endif; ?>
-
-                            <?php if (!$user['api_token']): ?>
-                            <form action="user/genrate-token" class="table-cell--action__form" method="post">
+                            <?php endif; ?> <?php if (!$user['api_token']): ?>
+                            <form
+                                action="user/genrate-token"
+                                class="table-cell--action__form"
+                                method="post"
+                            >
                                 <?php echo csrf_field(); ?>
-                                <input type="hidden" name="user_id" value="<?= $user[
-                                    'id'
-                                ] ?>" />
-                                <input type="submit" value="Get Token" class="btn btn--info">
+                                <input
+                                    type="hidden"
+                                    name="user_id"
+                                    value="<?= $user['id'] ?>"
+                                />
+                                <input
+                                    type="submit"
+                                    value="Get Token"
+                                    class="btn btn--info"
+                                />
                             </form>
                             <?php endif; ?>
 
@@ -248,9 +275,7 @@
                                 data-id="<?= $user['id'] ?>"
                             >
                                 Edit
-
                             </button>
-
                         </td>
                     </tr>
                     <?php endforeach; ?>

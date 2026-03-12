@@ -39,7 +39,7 @@ class UserController
 
     public function getUserJSON(): void
     {
-        $user_id = $_GET['id'] ?? null;
+        $user_id = (int) ($_GET['id'] ?? 0);
 
         if (!$user_id) {
             header('Content-Type: application/json');
@@ -56,6 +56,8 @@ class UserController
             echo json_encode(['error' => 'User not found']);
             exit();
         }
+
+        unset($user['password_hash'], $user['api_token']);
 
         header('Content-Type: application/json');
         echo json_encode($user);
@@ -166,3 +168,11 @@ class UserController
         exit();
     }
 }
+
+// curl -i -H "Authorization: Bearer your_64_character_token_here" \
+//     -H "Accept: application/json" \
+//     "https://manager.test/api/user?id=1"
+//
+//  curl -H "Authorization: Bearer your_64_character_token_here" \
+//     -H "Accept: application/json" \
+//     "https://manager.test/api/user?id=1"

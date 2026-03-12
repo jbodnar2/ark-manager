@@ -33,11 +33,13 @@ class AuthService
 
     private function startUserSession(array $user): void
     {
-        if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (
+            !isset($_SERVER['HTTP_AUTHORIZATION']) &&
+            !isset($_SERVER['authorization'])
+        ) {
             session_regenerate_id(true);
         }
 
-        session_regenerate_id(true);
         $_SESSION['user'] = [
             'id' => $user['id'],
             'username' => $user['username'],
@@ -58,7 +60,7 @@ class AuthService
             $headers['Authorization'] ?? ($headers['authorization'] ?? '');
 
         if (str_starts_with($authHeader, 'Bearer ')) {
-            $token = substr($authHeader, 7);
+            $token = trim(substr($authHeader, 7));
             $user = $this->userRepo->findByToken($token);
 
             if ($user && $user['role'] !== 'inactive') {
