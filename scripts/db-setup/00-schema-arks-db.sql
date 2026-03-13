@@ -362,3 +362,5 @@ WHERE
     id = NEW.id;
 
 END;
+
+CREATE INDEX IF NOT EXISTS idx_arks_target_url ON arks (target_url);

@@ -10,32 +10,17 @@ if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) {
     exit('Method Not Allowed');
 }
 
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
 header('Referrer-Policy: no-referrer');
 
-$root = $config['app']['root'];
-$db_file = $root . '/' . $config['db']['dir'] . '/' . $config['db']['name'];
 $public_reserved = $config['arks']['public_reserved'];
 $analytics_enabled = $config['analytics']['enabled'];
 $analytics_exclude_ips_singles = $config['analytics']['exclude_ips_singles'];
-
-try {
-    $db = new PDO('sqlite:' . $db_file);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $db->setAttribute(PDO::ATTR_TIMEOUT, 5);
-    $db->exec('PRAGMA journal_mode = WAL');
-} catch (PDOException $e) {
-    error_log('Resolver DB Connection Failed: ' . $e->getMessage());
-    http_response_code(503);
-    exit('Service unavailable');
-}
 
 $requested_ark = \App\Core\PathHelper::getCleanPath(
     $_SERVER['REQUEST_URI'] ?? '',
 );
 
-if ($requested_ark === null || $requested_ark === '') {
+if (empty($requested_ark)) {
     http_response_code(400);
     exit('Invalid ARK Specified');
 }

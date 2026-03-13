@@ -204,10 +204,14 @@ class UserRepository
 
     public function getPasswordHashByUsername(string $username): ?string
     {
+        // Only return the hash if the user is not inactive
         $sql =
-            'SELECT password_hash FROM users WHERE username = :username LIMIT 1';
+            'SELECT password_hash FROM users WHERE username = :username AND role != :inactive LIMIT 1';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':username' => $username]);
+        $stmt->execute([
+            ':username' => $username,
+            ':inactive' => User::ROLE_INACTIVE,
+        ]);
         $result = $stmt->fetch();
 
         return $result['password_hash'] ?? null;
@@ -242,21 +246,28 @@ class UserRepository
     public function setUserRole(int $user_id, string $role): bool
     {
         $allowedRoles = User::getAllowedRoles();
-
         if (!in_array($role, $allowedRoles, true)) {
             throw new InvalidArgumentException("Invalid role: {$role}.");
         }
 
-        $sql = 'UPDATE users SET role = :role WHERE id = :id';
+        $this->db->beginTransaction();
+        try {
+            $sql = 'UPDATE users SET role = :role WHERE id = :id';
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':role' => $role, ':id' => $user_id]);
 
-        $stmt = $this->db->prepare($sql);
+            // If deactivating, kill the tokens too
+            if ($role === User::ROLE_INACTIVE) {
+                $this->revokeToken($user_id);
+            }
 
-        return $stmt->execute([
-            ':role' => $role,
-            ':id' => $user_id,
-        ]);
+            $this->db->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
-
     public function updateUserInfo(User $user): bool
     {
         $email_verification = $this->verifyUniqueEmail($user->email, $user->id);

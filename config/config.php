@@ -5,7 +5,7 @@ return [
         'env' => getenv('APP_ENV') ?: 'prod',
         'debug' => filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN),
         'timezone' => 'America/New_York',
-        'root' => __DIR__,
+        'root' => dirname(__DIR__),
         'https_only' => filter_var(
             getenv('APP_HTTPS_ONLY'),
             FILTER_VALIDATE_BOOLEAN,

@@ -1,6 +1,19 @@
 <?php
 declare(strict_types=1);
 
+$envPath = __DIR__ . '/../.env';
+if (file_exists($envPath)) {
+    $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (str_starts_with(trim($line), '#')) {
+            continue;
+        }
+        putenv(trim($line));
+    }
+}
+
+$config = require_once __DIR__ . '/../config/config.php';
+
 use App\Repositories\UserRepository;
 
 // Start output buffering
@@ -15,8 +28,8 @@ register_shutdown_function(function () {
 });
 
 // 1. Load Configurations
-$config = require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/functions.php';
+// $config = require_once __DIR__ . '/../config.php';
+// require_once __DIR__ . '/functions.php';
 
 // 2. Error Reporting Logic
 if ($config['app']['debug']) {
@@ -88,16 +101,24 @@ define('CSP_NONCE', $nonce); // Or use a function: function get_csp_nonce() { re
 ini_set('session.cookie_samesite', 'Lax');
 
 // Start session with basic options
-if (session_status() === PHP_SESSION_NONE) {
-    session_start([
-        'cookie_lifetime' => 86400,
-        'cookie_secure' => $config['app']['https_only'],
-        'cookie_httponly' => true,
-    ]);
-}
+// Only start session and ensure CSRF if this is NOT the resolver
+if (strpos($_SERVER['SCRIPT_NAME'], 'resolver') === false) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start([
+            'cookie_lifetime' => 86400,
+            'cookie_secure' => $config['app']['https_only'],
+            'cookie_httponly' => true,
+        ]);
+    }
 
-require_once __DIR__ . '/Core/Security.php';
-\App\Core\Security::ensureCsrfToken();
+    // Move the CSRF check inside this block
+    require_once __DIR__ . '/Core/Security.php';
+    \App\Core\Security::ensureCsrfToken();
+} else {
+    // If it IS the resolver, we still need the class for other things,
+    // but we don't need to run ensureCsrfToken()
+    require_once __DIR__ . '/Core/Security.php';
+}
 
 // 5. Database Connection
 try {
