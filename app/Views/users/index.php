@@ -44,7 +44,7 @@
             </ul>
         </nav>
         <form action="/logout" class="sidebar__form logout-form" method="POST">
-            <?php echo csrf_field(); ?>
+            <?= \App\Core\Security::csrfField() ?>
             <input
                 type="submit"
                 value="Logout"
@@ -108,7 +108,7 @@
                     </header>
 
                     <div class="dialog__content dialog__content--grid">
-                        <?php csrf_field(true); ?>
+                        <?= \App\Core\Security::csrfField() ?>
 
                         <div class="form-field">
                             <label for="first_name">First Name</label>
@@ -242,7 +242,7 @@
                                 class="table-cell--action__form"
                                 method="post"
                             >
-                                <?php echo csrf_field(); ?>
+                                <?= \App\Core\Security::csrfField() ?>
                                 <input
                                     type="hidden"
                                     name="user_id"
@@ -260,7 +260,7 @@
                                 class="table-cell--action__form"
                                 method="post"
                             >
-                                <?php echo csrf_field(); ?>
+                                <?= \App\Core\Security::csrfField() ?>
                                 <input
                                     type="hidden"
                                     name="user_id"

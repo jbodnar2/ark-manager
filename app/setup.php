@@ -96,7 +96,8 @@ if (session_status() === PHP_SESSION_NONE) {
     ]);
 }
 
-ensure_csrf_token();
+require_once __DIR__ . '/Core/Security.php';
+\App\Core\Security::ensureCsrfToken();
 
 // 5. Database Connection
 try {

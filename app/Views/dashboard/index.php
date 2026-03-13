@@ -62,7 +62,7 @@
             </ul>
         </nav>
         <form action="/logout" class="sidebar__form logout-form" method="POST">
-            <?php echo csrf_field(); ?>
+            <?= \App\Core\Security::csrfField() ?>
             <input type="submit" value="Logout" class="logout-form__button btn btn--ghost">
         </form>
     </div>

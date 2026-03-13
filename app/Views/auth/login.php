@@ -26,7 +26,7 @@
             <?php endif; ?>
 
             <form action="/" method="post">
-                <?php csrf_field(true); ?>
+                <?= \App\Core\Security::csrfField() ?>
                 <div class="form-field">
                     <label for="username">User Name</label>
                     <input type="text" name="username" id="username" value="admin_1">

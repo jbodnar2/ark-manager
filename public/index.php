@@ -7,6 +7,7 @@ require_once __DIR__ . '/../app/Core/Router.php';
 
 use App\Core\PathHelper;
 use App\Core\Router;
+use App\Core\Security;
 
 $base_path = $config['app']['root'];
 $routes = require_once __DIR__ . '/../config/routes.php';
@@ -66,7 +67,12 @@ if ($className && $action) {
             !isset($headers['authorization']) ||
             !str_starts_with($headers['authorization'], 'bearer ')
         ) {
-            validate_csrf();
+            if (!\App\Core\Security::validateCsrf()) {
+                $_SESSION['error_message'] =
+                    'Session expired. Please try again.';
+                header('Location: /');
+                exit();
+            }
         }
     }
 

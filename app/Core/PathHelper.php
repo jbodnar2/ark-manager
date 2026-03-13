@@ -3,14 +3,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Handles URI path extraction and route resolution.
- */
 class PathHelper
 {
-    /**
-     * Extract, decode, and trim the URI path.
-     */
     public static function getCleanPath(
         string $uri,
         ?string $fallback = null,
@@ -23,7 +17,6 @@ class PathHelper
 
         $clean = trim(rawurldecode($path), '/');
 
-        // Security check for null bytes or excessive length
         if (str_contains($clean, "\0") || strlen($clean) > 2048) {
             return $fallback;
         }
@@ -31,10 +24,6 @@ class PathHelper
         return $clean;
     }
 
-    /**
-     * Verifies the existence of a page file and returns the absolute path.
-     * Note: This defaults to the errors directory.
-     */
     public static function getVerifiedPagePath(
         string $root,
         string $filename,
