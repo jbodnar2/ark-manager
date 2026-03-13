@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+namespace App\Services;
+
+use App\Repositories\UserRepository;
+use App\Models\User;
+
 class AuthService
 {
     private UserRepository $userRepo;
@@ -19,10 +24,12 @@ class AuthService
     {
         $user = $this->userRepo->findByUsername($username);
 
+        $password_hash = $this->userRepo->getPasswordHashByUsername($username);
+
         if (
             $user &&
-            $user['role'] !== 'inactive' &&
-            password_verify($password, $user['password_hash'])
+            $user->role !== 'inactive' &&
+            password_verify($password, $password_hash)
         ) {
             $this->startUserSession($user);
             return true;
@@ -31,7 +38,7 @@ class AuthService
         return false;
     }
 
-    private function startUserSession(array $user): void
+    private function startUserSession(User $user): void
     {
         if (
             !isset($_SERVER['HTTP_AUTHORIZATION']) &&
@@ -41,11 +48,11 @@ class AuthService
         }
 
         $_SESSION['user'] = [
-            'id' => $user['id'],
-            'username' => $user['username'],
-            'first_name' => $user['first_name'],
-            'last_name' => $user['last_name'],
-            'role' => $user['role'],
+            'id' => $user->id,
+            'username' => $user->username,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'role' => $user->role,
             'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
             'last_login' => time(),
@@ -54,16 +61,15 @@ class AuthService
 
     private function authenticateByToken(): bool
     {
-        $headers = getAllHeaders();
+        $headers = array_change_key_case(getAllHeaders(), CASE_LOWER);
 
-        $authHeader =
-            $headers['Authorization'] ?? ($headers['authorization'] ?? '');
+        $authHeader = $headers['authorization'] ?? '';
 
         if (str_starts_with($authHeader, 'Bearer ')) {
             $token = trim(substr($authHeader, 7));
             $user = $this->userRepo->findByToken($token);
 
-            if ($user && $user['role'] !== 'inactive') {
+            if ($user && $user->role !== 'inactive') {
                 $this->startUserSession($user);
                 return true;
             }
@@ -88,7 +94,7 @@ class AuthService
 
         $user = $this->userRepo->findById((int) $_SESSION['user']['id']);
 
-        if (!$user || $user['role'] === 'inactive') {
+        if (!$user || $user->role === 'inactive') {
             $_SESSION = [];
             $this->logout();
             return false;

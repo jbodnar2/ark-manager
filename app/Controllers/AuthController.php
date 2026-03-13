@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+namespace App\Controllers;
+
+use App\Services\AuthService;
+use App\Models\User;
+
 class AuthController
 {
     private AuthService $authService;
@@ -20,7 +25,7 @@ class AuthController
         }
 
         $page_title = self::DEFAULT_TITLE;
-        require_once __DIR__ . '/pages/login.php';
+        require_once __DIR__ . '/../Views/auth/login.php';
     }
 
     public function login(): void
@@ -36,7 +41,7 @@ class AuthController
         $page_title = self::DEFAULT_TITLE;
         $error = 'Invalid username or password';
 
-        require_once __DIR__ . '/pages/login.php';
+        require_once __DIR__ . '/../Views/auth/login.php';
         exit();
     }
 

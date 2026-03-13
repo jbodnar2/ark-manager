@@ -404,8 +404,8 @@ index.php (router excerpt)
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../includes/setup.php';
-require_once __DIR__ . '/../includes/AuthController.php';
+require_once __DIR__ . '/../app/setup.php';
+require_once __DIR__ . '/../app/AuthController.php';
 
 $request = Router::getCleanPath($_SERVER['REQUEST_URI'] ?? '', 'error404');
 

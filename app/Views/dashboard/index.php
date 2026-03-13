@@ -85,4 +85,4 @@
 
     <footer class="footer"></footer>
 </div>
-<?php require_once __DIR__ . '/../partials/foot.php'; ?>
+<?php require_once __DIR__ . '/partials/foot.php'; ?>

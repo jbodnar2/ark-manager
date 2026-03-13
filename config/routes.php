@@ -9,7 +9,7 @@ return [
             ],
             'POST' => ['controller' => 'AuthController', 'action' => 'login'],
         ],
-        'error404' => ['file' => 'error-404.php'],
+        'error404' => ['file' => '404.php'],
     ],
     'protected' => [
         'dashboard' => [
@@ -40,7 +40,7 @@ return [
                 'role' => 'admin',
             ],
         ],
-        'user/genrate-token' => [
+        'user/generate-token' => [
             'POST' => [
                 'controller' => 'UserController',
                 'action' => 'generateUserToken',

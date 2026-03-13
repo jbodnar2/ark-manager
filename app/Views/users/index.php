@@ -193,6 +193,7 @@
                     <tr>
                         <th>Last Name</th>
                         <th>First Name</th>
+                        <th>Username</th>
                         <th>Email</th>
                         <th>Role</th>
                         <!--<th>API Token</th>-->
@@ -204,22 +205,27 @@
                     <tr>
                         <td>
                             <?= htmlspecialchars(
-                                $user['last_name'],
+                                $user->last_name,
                                 ENT_QUOTES,
                             ) ?>
                         </td>
 
                         <td>
                             <?= htmlspecialchars(
-                                $user['first_name'],
+                                $user->first_name,
                                 ENT_QUOTES,
                             ) ?>
                         </td>
+
                         <td>
-                            <?= htmlspecialchars($user['email'], ENT_QUOTES) ?>
+                            <?= htmlspecialchars($user->username, ENT_QUOTES) ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($user->email, ENT_QUOTES) ?>
                         </td>
                         <td>
-                            <?= htmlspecialchars($user['role'], ENT_QUOTES) ?>
+                            <?= htmlspecialchars($user->role, ENT_QUOTES) ?>
                         </td>
                         <!--<td>
                             <?php
@@ -230,7 +236,7 @@
                         ?>
                         </td>-->
                         <td class="table-cell--actions">
-                            <?php if ($user['api_token']): ?>
+                            <?php if ($user->api_token): ?>
                             <form
                                 action="user/revoke-token"
                                 class="table-cell--action__form"
@@ -240,7 +246,7 @@
                                 <input
                                     type="hidden"
                                     name="user_id"
-                                    value="<?= $user['id'] ?>"
+                                    value="<?= $user->id ?>"
                                 />
                                 <input
                                     type="submit"
@@ -248,9 +254,9 @@
                                     class="btn btn--info"
                                 />
                             </form>
-                            <?php endif; ?> <?php if (!$user['api_token']): ?>
+                            <?php endif; ?> <?php if (!$user->api_token): ?>
                             <form
-                                action="user/genrate-token"
+                                action="user/generate-token"
                                 class="table-cell--action__form"
                                 method="post"
                             >
@@ -258,7 +264,7 @@
                                 <input
                                     type="hidden"
                                     name="user_id"
-                                    value="<?= $user['id'] ?>"
+                                    value="<?= $user->id ?>"
                                 />
                                 <input
                                     type="submit"
@@ -272,7 +278,7 @@
                                 class="btn btn--info"
                                 command="show-modal"
                                 commandfor="user-form"
-                                data-id="<?= $user['id'] ?>"
+                                data-id="<?= $user->id ?>"
                             >
                                 Edit
                             </button>
@@ -286,4 +292,4 @@
 
     <footer class="footer"></footer>
 </div>
-<?php require_once __DIR__ . '/../partials/foot.php'; ?>
+<?php require_once __DIR__ . '/partials/foot.php'; ?>

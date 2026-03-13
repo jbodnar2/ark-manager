@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+namespace App\Controllers;
+
+use App\Repositories\UserRepository;
+use App\Services\AuthService;
+use InvalidArgumentException;
+
 class UserController
 {
     private UserRepository $userRepo;
@@ -34,7 +40,7 @@ class UserController
         $is_viewer = $this->authService->hasRole('viewer');
 
         // Load the view file
-        require_once __DIR__ . '/pages/users.php';
+        require_once __DIR__ . '/../Views/users/index.php';
     }
 
     public function getUserJSON(): void
@@ -57,7 +63,7 @@ class UserController
             exit();
         }
 
-        unset($user['password_hash'], $user['api_token']);
+        unset($user->password_hash, $user->api_token);
 
         header('Content-Type: application/json');
         echo json_encode($user);

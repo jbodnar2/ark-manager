@@ -53,3 +53,14 @@ function validate_csrf(): void
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 }
+
+function logInfo($data): void
+{
+    $logFile = __DIR__ . '/../logs/debug.log';
+    $timestamp = date('Y-m-d H:i:s');
+    $entry =
+        "[$timestamp] " .
+        (is_string($data) ? $data : print_r($data, true)) .
+        PHP_EOL;
+    file_put_contents($logFile, $entry, FILE_APPEND);
+}

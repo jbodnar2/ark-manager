@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../setup.php';
-require_once __DIR__ . '/../AuthController.php';
+require_once __DIR__ . '/../../setup.php';
+require_once __DIR__ . '/../../Controllers/AuthController.php';
 ?>
 
 <!DOCTYPE html>

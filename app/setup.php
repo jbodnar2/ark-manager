@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Repositories\UserRepository;
+
 // Start output buffering
 ob_start();
 
@@ -118,11 +120,9 @@ try {
     exit('Error: Unable to connect to the database.');
 }
 
-require_once __DIR__ . '/UserRepository.php';
-require_once __DIR__ . '/AuthService.php';
-// require_once __DIR__ . '/UserController.php';
-// require_once __DIR__ . '/AuthController.php';
+require_once __DIR__ . '/Models/User.php';
+require_once __DIR__ . '/Repositories/UserRepository.php';
+require_once __DIR__ . '/Services/AuthService.php';
 
-$userRepo = new UserRepository($db);
-$authService = new AuthService($userRepo);
-// $authController = new AuthController($authService);
+$userRepo = new App\Repositories\UserRepository($db);
+$authService = new \App\Services\AuthService($userRepo);

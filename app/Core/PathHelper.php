@@ -1,17 +1,15 @@
 <?php
 declare(strict_types=1);
 
+namespace App\Core;
+
 /**
  * Handles URI path extraction and route resolution.
  */
-class Router
+class PathHelper
 {
     /**
      * Extract, decode, and trim the URI path.
-     *
-     * @param string $uri The raw URI (from $_SERVER['REQUEST_URI']).
-     * @param string|null $fallback The value to return if parsing fails.
-     * @return string|null Returns the cleaned path slug or the fallback value.
      */
     public static function getCleanPath(
         string $uri,
@@ -25,7 +23,8 @@ class Router
 
         $clean = trim(rawurldecode($path), '/');
 
-        if (strpos($clean, "\0") !== false || strlen($clean) > 2048) {
+        // Security check for null bytes or excessive length
+        if (str_contains($clean, "\0") || strlen($clean) > 2048) {
             return $fallback;
         }
 
@@ -34,19 +33,18 @@ class Router
 
     /**
      * Verifies the existence of a page file and returns the absolute path.
-     *
-     * @param string $root           The application root directory.
-     * @param string $filename       The filename from the routes array.
-     * @param string $error_filename The fallback filename if no match found.
-     * @return string The full absolute path to the file.
+     * Note: This defaults to the errors directory.
      */
     public static function getVerifiedPagePath(
         string $root,
         string $filename,
-        string $error_filename = 'error-404.php',
+        string $error_filename = '404.php',
     ): string {
-        $page_path = $root . '/includes/pages/' . $filename;
-        $fallback_path = $root . '/includes/pages/' . $error_filename;
+        // Define where error views live
+        $error_dir = $root . '/app/Views/errors/';
+
+        $page_path = $error_dir . $filename;
+        $fallback_path = $error_dir . $error_filename;
 
         if (is_file($page_path) && is_readable($page_path)) {
             return $page_path;
