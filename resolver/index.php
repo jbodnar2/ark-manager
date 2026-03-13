@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../app/setup.php';
-require_once __DIR__ . '/../app/Core/Router.php';
+require_once __DIR__ . '/../app/Core/PathHelper.php';
 
 if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) {
     http_response_code(405);
@@ -31,7 +31,9 @@ try {
     exit('Service unavailable');
 }
 
-$requested_ark = App\Core\Router::getCleanPath($_SERVER['REQUEST_URI'] ?? '');
+$requested_ark = \App\Core\PathHelper::getCleanPath(
+    $_SERVER['REQUEST_URI'] ?? '',
+);
 
 if ($requested_ark === null || $requested_ark === '') {
     http_response_code(400);
