@@ -204,7 +204,7 @@ class UserRepository
 
     public function getPasswordHashByUsername(string $username): ?string
     {
-        // Only return the hash if the user is not inactive
+        // Only return the hash if the user is active / NOT inactive.
         $sql =
             'SELECT password_hash FROM users WHERE username = :username AND role != :inactive LIMIT 1';
         $stmt = $this->db->prepare($sql);
@@ -268,6 +268,7 @@ class UserRepository
             throw $e;
         }
     }
+
     public function updateUserInfo(User $user): bool
     {
         $email_verification = $this->verifyUniqueEmail($user->email, $user->id);

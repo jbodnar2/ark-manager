@@ -5,7 +5,7 @@ return [
         '' => [
             'GET' => [
                 'controller' => 'AuthController',
-                'action' => 'getView',
+                'action' => 'index',
             ],
             'POST' => ['controller' => 'AuthController', 'action' => 'login'],
         ],
@@ -15,7 +15,7 @@ return [
         'dashboard' => [
             'GET' => [
                 'controller' => 'DashboardController',
-                'action' => 'getView',
+                'action' => 'index',
                 'role' => 'viewer',
             ],
         ],
@@ -27,15 +27,25 @@ return [
             ],
             'POST' => [
                 'controller' => 'UserController',
-                'action' => 'create',
+                'action' => 'store',
                 'role' => 'admin',
             ],
         ],
+        // ---
+        // Direct to the "Add New User" form (currently using a dialog)
+        // ---
+        // 'users/create' => [
+        //     'GET' => [
+        //         'controller' => 'UserController',
+        //         'action' => 'create',
+        //         'role' => 'admin',
+        //     ],
+        // ],
         'users/show' => [
             'GET' => [
                 'controller' => 'UserController',
                 'action' => 'show',
-                'role' => 'addmin',
+                'role' => 'admin',
             ],
         ],
         'user/revoke-token' => [

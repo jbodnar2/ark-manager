@@ -16,14 +16,14 @@
         <div class="header__userinfo">
 
             <span class="userinfo__name">
-                <?= $user['first_name'] . ' ' . $user['last_name'] ?>
+                <?= $current_user['first_name'] .
+                    ' ' .
+                    $current_user['last_name'] ?>
             </span>
 
 
-
-
             <span class="userinfo__role">
-                <?= $user['role'] ?>
+                <?= $current_user['role'] ?>
             </span>
         </div>
 
@@ -85,4 +85,4 @@
 
     <footer class="footer"></footer>
 </div>
-<?php require_once __DIR__ . '/partials/foot.php'; ?>
+<?php require_once __DIR__ . '/../partials/foot.php'; ?>

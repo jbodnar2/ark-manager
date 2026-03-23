@@ -38,6 +38,7 @@ if ($config['app']['debug']) {
     error_reporting(E_ALL);
 
     $session_save_path = $config['app']['root'] . '/logs/sessions';
+
     if (!is_dir($session_save_path)) {
         mkdir($session_save_path, 0700, true);
     }

@@ -7,28 +7,39 @@ use App\Services\AuthService;
 use InvalidArgumentException;
 use App\Repositories\UserRepository;
 
-class UserController
+class UserController extends BaseController
 {
     private UserRepository $userRepo;
-    private AuthService $authService;
 
     public function __construct(
         UserRepository $userRepo,
         AuthService $authService,
     ) {
+        parent::__construct($authService);
+
         $this->userRepo = $userRepo;
-        $this->authService = $authService;
     }
 
     private const DEFAULT_PAGE_TITLE = 'Manage Users';
 
     public function index(): void
     {
-        // Get all the users
-        $users = $this->userRepo->getAllUsers();
+        $this->render('users/index', [
+            'page_title' => 'Manage Users',
+            'user_display_title' => 'All Active & Inactive Users',
+            'users' => $this->userRepo->getAllUsers(),
+        ]);
+    }
 
-        // User display title
-        $user_display_title = 'All Active &amp; Inactive Users';
+    public function show(): void
+    {
+        $user_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+        if ($user_id === null || $user_id === false || $user_id <= 0) {
+            $_SESSION['error_message'] = 'Invalid User ID provided';
+            header('Location: /users');
+            exit();
+        }
 
         // Set the page title
         $page_title = self::DEFAULT_PAGE_TITLE;
@@ -39,11 +50,10 @@ class UserController
         $is_user = $this->authService->hasRole('user');
         $is_viewer = $this->authService->hasRole('viewer');
 
-        // Load the view file
-        require_once __DIR__ . '/../Views/users/index.php';
+        require_once __DIR__ . '/../Views/users/show.php';
     }
 
-    public function create(): void
+    public function store(): void
     {
         if (
             !$this->authService->isLoggedIn() ||
@@ -79,13 +89,11 @@ class UserController
                 $password,
                 $role,
             );
-            $_SESSION['add-user']['success_message'] =
-                'User created successfully.';
+            $_SESSION['success_message'] = 'User created successfully.';
         } catch (InvalidArgumentException $e) {
-            $_SESSION['add-user']['error_message'] = $e->getMessage();
+            $_SESSION['error_message'] = $e->getMessage();
         } catch (PDOException $e) {
-            $_SESSION['add-user']['error_message'] =
-                'A database error occurred.';
+            $_SESSION['error_message'] = 'A database error occurred.';
         }
 
         header('Location: /users');

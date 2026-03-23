@@ -16,7 +16,7 @@ class AuthController
 
     private const DEFAULT_TITLE = 'ARK Manager Login';
 
-    public function getView(): void
+    public function index(): void
     {
         if ($this->authService->isLoggedIn()) {
             header('Location: /dashboard');
@@ -38,7 +38,7 @@ class AuthController
         }
 
         $page_title = self::DEFAULT_TITLE;
-        $error = 'Invalid username or password';
+        $_SESSION['login_error'] = 'Invalid username or password';
 
         require_once __DIR__ . '/../Views/auth/login.php';
         exit();

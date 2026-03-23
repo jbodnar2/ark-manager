@@ -6,31 +6,20 @@ namespace App\Controllers;
 
 use App\Services\AuthService;
 
-class DashboardController
+class DashboardController extends BaseController
 {
-    private AuthService $authService;
-
     private const DEFAULT_PAGE_TITLE = 'ARK Manager Dashboard';
 
     public function __construct(AuthService $authService)
     {
-        $this->authService = $authService;
+        // $this->authService = $authService;
+        parent::__construct($authService);
     }
 
-    public function getView(): void
+    public function index(): void
     {
-        if (!$this->authService->isLoggedIn()) {
-            header('Location: /');
-            exit();
-        }
-
-        $page_title = self::DEFAULT_PAGE_TITLE;
-
-        $user = $_SESSION['user'] ?? [];
-        $is_admin = $this->authService->hasRole('admin');
-        $is_user = $this->authService->hasRole('user');
-        $is_viewer = $this->authService->hasRole('viewer');
-
-        require_once __DIR__ . '/../Views/dashboard/index.php';
+        $this->render('dashboard/index', [
+            'page_title' => self::DEFAULT_PAGE_TITLE,
+        ]);
     }
 }

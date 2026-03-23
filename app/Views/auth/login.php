@@ -14,12 +14,12 @@
         </header>
 
         <main class="main">
-            <?php if (isset($_SESSION['error']['message'])): ?>
+            <?php if (isset($_SESSION['login_error'])): ?>
             <div class="alert alert--error">
                 <div class="alert__message">
 
-                    <?= htmlspecialchars($_SESSION['error']['message']) ?>
-                    <?php unset($_SESSION['error']['message']); ?>
+                    <?= htmlspecialchars($_SESSION['login_error']) ?>
+                    <?php unset($_SESSION['login_error']); ?>
 
                 </div>
             </div>

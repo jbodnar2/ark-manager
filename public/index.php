@@ -55,12 +55,12 @@ if ($required_role && !$authService->hasRole($required_role)) {
     exit();
 }
 
-$className = $route_info['controller'] ?? null;
+$class_name = $route_info['controller'] ?? null;
 $action = $route_info['action'] ?? null;
 $target = $route_info['file'] ?? null;
 
 // 5. Dispatching
-if ($className && $action) {
+if ($class_name && $action) {
     if ($method === 'POST') {
         $headers = array_change_key_case(getallheaders(), CASE_LOWER);
         if (
@@ -76,17 +76,17 @@ if ($className && $action) {
         }
     }
 
-    require_once __DIR__ . "/../app/Controllers/{$className}.php";
+    $fqcn = 'App\\Controllers\\' . $class_name;
 
-    if ($className === 'UserController') {
-        $controller = new App\Controllers\UserController(
-            $userRepo,
-            $authService,
-        );
-    } elseif ($className === 'DashboardController') {
-        $controller = new App\Controllers\DashboardController($authService);
+    require_once __DIR__ . '/../app/Controllers/BaseController.php';
+    require_once __DIR__ . "/../app/Controllers/{$class_name}.php";
+
+    if ($class_name === 'UserController') {
+        $controller = new $fqcn($userRepo, $authService);
+    } elseif ($class_name === 'DashboardController') {
+        $controller = new $fqcn($authService);
     } else {
-        $controller = new App\Controllers\AuthController($authService);
+        $controller = new $fqcn($authService);
     }
 
     $controller->$action();

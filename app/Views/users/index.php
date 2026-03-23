@@ -11,10 +11,12 @@
         </div>
         <div class="header__userinfo">
             <span class="userinfo__name">
-                <?= $user['first_name'] . ' ' . $user['last_name'] ?>
+                <?= $current_user['first_name'] .
+                    ' ' .
+                    $current_user['last_name'] ?>
             </span>
 
-            <span class="userinfo__role"> <?= $user['role'] ?> </span>
+            <span class="userinfo__role"> <?= $current_user['role'] ?> </span>
         </div>
     </header>
 
@@ -53,25 +55,18 @@
     </div>
 
     <main class="main">
-        <?php if (!empty($_SESSION['add-user']['success_message'])): ?>
+        <?php if (!empty($_SESSION['success_message'])): ?>
         <div class="alert alert--success">
-            <?= htmlspecialchars(
-                $_SESSION['add-user']['success_message'],
-                ENT_QUOTES,
-            ) ?>
+            <?= htmlspecialchars($_SESSION['success_message'], ENT_QUOTES) ?>
         </div>
-        <?php unset(
-            $_SESSION['add-user']['success_message'],
-        ); ?> <?php endif; ?> <?php if (
-     !empty($_SESSION['add-user']['error_message'])
- ): ?>
+        <?php unset($_SESSION['success_message']); ?> <?php endif; ?>
+
+        <?php if (!empty($_SESSION['error_message'])): ?>
+
         <div class="alert alert--error">
-            <?= htmlspecialchars(
-                $_SESSION['add-user']['error_message'],
-                ENT_QUOTES,
-            ) ?>
+            <?= htmlspecialchars($_SESSION['error_message'], ENT_QUOTES) ?>
         </div>
-        <?php unset($_SESSION['add-user']['error_message']); ?> <?php endif; ?>
+        <?php unset($_SESSION['error_message']); ?> <?php endif; ?>
         <?php if (isset($_SESSION['new_api_token'])): ?>
         <div class="alert alert--success">
             <div>
@@ -273,14 +268,8 @@
                             </form>
                             <?php endif; ?>
 
-                            <button
-                                class="btn btn--info"
-                                command="show-modal"
-                                commandfor="user-form"
-                                data-id="<?= $user->id ?>"
-                            >
-                                Edit
-                            </button>
+                            <a href="/users/show?id=<?= $user->id ?>" class="btn btn--info">Edit</a>
+
                         </td>
                     </tr>
                     <?php endforeach; ?>
