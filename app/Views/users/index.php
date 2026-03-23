@@ -101,7 +101,7 @@
             </button>
 
             <dialog id="user-form">
-                <form action="users/add" method="POST">
+                <form action="users" method="POST">
                     <header class="dialog__header">
                         <h2>Add User</h2>
                     </header>

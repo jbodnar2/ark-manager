@@ -22,7 +22,7 @@ class UserController
 
     private const DEFAULT_PAGE_TITLE = 'Manage Users';
 
-    public function getView(): void
+    public function index(): void
     {
         // Get all the users
         $users = $this->userRepo->getAllUsers();
@@ -43,34 +43,7 @@ class UserController
         require_once __DIR__ . '/../Views/users/index.php';
     }
 
-    public function getUserJSON(): void
-    {
-        $user_id = (int) ($_GET['id'] ?? 0);
-
-        if (!$user_id) {
-            header('Content-Type: application/json');
-            http_response_code(400);
-            echo json_encode(['error' => 'User ID is required']);
-            exit();
-        }
-
-        $user = $this->userRepo->findById((int) $user_id);
-
-        if (!$user) {
-            header('Content-Type: application/json');
-            http_response_code(404);
-            echo json_encode(['error' => 'User not found']);
-            exit();
-        }
-
-        unset($user->password_hash, $user->api_token);
-
-        header('Content-Type: application/json');
-        echo json_encode($user);
-        exit();
-    }
-
-    public function addUser(): void
+    public function create(): void
     {
         if (
             !$this->authService->isLoggedIn() ||
@@ -116,6 +89,33 @@ class UserController
         }
 
         header('Location: /users');
+        exit();
+    }
+
+    public function getUserJSON(): void
+    {
+        $user_id = (int) ($_GET['id'] ?? 0);
+
+        if (!$user_id) {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            echo json_encode(['error' => 'User ID is required']);
+            exit();
+        }
+
+        $user = $this->userRepo->findById((int) $user_id);
+
+        if (!$user) {
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['error' => 'User not found']);
+            exit();
+        }
+
+        unset($user->password_hash, $user->api_token);
+
+        header('Content-Type: application/json');
+        echo json_encode($user);
         exit();
     }
 

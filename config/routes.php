@@ -22,22 +22,20 @@ return [
         'users' => [
             'GET' => [
                 'controller' => 'UserController',
-                'action' => 'getView',
+                'action' => 'index',
+                'role' => 'admin',
+            ],
+            'POST' => [
+                'controller' => 'UserController',
+                'action' => 'create',
                 'role' => 'admin',
             ],
         ],
         'users/show' => [
             'GET' => [
                 'controller' => 'UserController',
-                'action' => 'getView',
+                'action' => 'show',
                 'role' => 'addmin',
-            ],
-        ],
-        'users/add' => [
-            'POST' => [
-                'controller' => 'UserController',
-                'action' => 'addUser',
-                'role' => 'admin',
             ],
         ],
         'user/revoke-token' => [
