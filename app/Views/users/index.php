@@ -1,5 +1,4 @@
 <?php require_once __DIR__ . '/../partials/head.php'; ?>
-<! -- // TODO: Allow editing, deleting user. -->
 
 <style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>"></style>
 
@@ -292,4 +291,4 @@
 
     <footer class="footer"></footer>
 </div>
-<?php require_once __DIR__ . '/partials/foot.php'; ?>
+<?php require_once __DIR__ . '/../partials/foot.php'; ?>

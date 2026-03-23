@@ -26,6 +26,13 @@ return [
                 'role' => 'admin',
             ],
         ],
+        'users/show' => [
+            'GET' => [
+                'controller' => 'UserController',
+                'action' => 'getView',
+                'role' => 'addmin',
+            ],
+        ],
         'users/add' => [
             'POST' => [
                 'controller' => 'UserController',

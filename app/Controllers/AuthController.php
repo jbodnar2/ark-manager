@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Services\AuthService;
-use App\Models\User;
 
 class AuthController
 {

@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Repositories\UserRepository;
 use App\Services\AuthService;
 use InvalidArgumentException;
+use App\Repositories\UserRepository;
 
 class UserController
 {
