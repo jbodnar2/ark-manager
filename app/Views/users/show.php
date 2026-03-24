@@ -74,9 +74,11 @@
                     <label for="first_name">First Name</label>
 
 
-                    <button class="btn icon-only">
+
+                    <button class="btn btn--icon">
                         <span class="icon icon--lock"></span>
                     </button>
+
 
 
 

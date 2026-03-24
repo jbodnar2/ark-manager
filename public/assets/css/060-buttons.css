@@ -154,28 +154,31 @@ a.btn--primary:visited {
     color: var(--action-text-primary);
 }
 
-/* 7. Inline Icon Button Override */
-.btn.icon-only {
-    /* Forced Sizing */
-    width: 1.5em !important;
-    height: 1.5em !important;
-    padding: 0 !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
+button.btn.btn--icon {
+    /* Resetting the box */
+    padding: 0;
+    width: 1.5em;
+    height: 1.5em;
+    min-width: 0;
+    min-height: 0;
 
-    /* Forced Alignment */
-    display: inline-flex !important;
-    vertical-align: middle !important;
-    line-height: 0 !important;
+    /* Alignment */
+    display: inline-flex;
+    vertical-align: middle;
+    margin-block-start: -0.15em;
+    align-items: center;
+    justify-content: center;
 
-    /* Clean up */
-    border: none !important;
-    background: transparent !important;
+    /* Visuals */
+    border: none;
+    background: transparent;
+    line-height: 1;
 }
 
-/* Ensure the span inside doesn't have its own margin/padding */
-.btn.icon-only .icon {
-    margin: 0 !important;
-    width: 1em !important;
-    height: 1em !important;
+/* Ensure the icon stays centered and sized */
+button.btn.btn--icon .icon {
+    width: 1em;
+    height: 1em;
+    margin: 0;
+    display: block;
 }
