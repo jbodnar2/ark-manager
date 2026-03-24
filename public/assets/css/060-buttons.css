@@ -154,9 +154,28 @@ a.btn--primary:visited {
     color: var(--action-text-primary);
 }
 
-/* 6. Icon Integration */
-.btn .icon {
-    width: 1em;
-    height: 1em;
-    flex-shrink: 0;
+/* 7. Inline Icon Button Override */
+.btn.icon-only {
+    /* Forced Sizing */
+    width: 1.5em !important;
+    height: 1.5em !important;
+    padding: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    /* Forced Alignment */
+    display: inline-flex !important;
+    vertical-align: middle !important;
+    line-height: 0 !important;
+
+    /* Clean up */
+    border: none !important;
+    background: transparent !important;
+}
+
+/* Ensure the span inside doesn't have its own margin/padding */
+.btn.icon-only .icon {
+    margin: 0 !important;
+    width: 1em !important;
+    height: 1em !important;
 }

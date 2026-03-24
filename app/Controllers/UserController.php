@@ -41,16 +41,10 @@ class UserController extends BaseController
             exit();
         }
 
-        // Set the page title
-        $page_title = self::DEFAULT_PAGE_TITLE;
-
-        // Extract info about current user
-        $user = $_SESSION['user'] ?? [];
-        $is_admin = $this->authService->hasRole('admin');
-        $is_user = $this->authService->hasRole('user');
-        $is_viewer = $this->authService->hasRole('viewer');
-
-        require_once __DIR__ . '/../Views/users/show.php';
+        $this->render('users/show', [
+            'page_title' => self::DEFAULT_PAGE_TITLE,
+            'user' => $this->userRepo->findById($user_id),
+        ]);
     }
 
     public function store(): void

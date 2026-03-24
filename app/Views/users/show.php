@@ -2,10 +2,7 @@
 
 <style nonce="<?= htmlspecialchars(CSP_NONCE, ENT_QUOTES) ?>"></style>
 
-<?php
-var_dump($user);
-exit();
-?>
+
 
 <div class="main-grid">
     <header class="header">
@@ -16,10 +13,12 @@ exit();
         </div>
         <div class="header__userinfo">
             <span class="userinfo__name">
-                <?= $user['first_name'] . ' ' . $user['last_name'] ?>
+                <?= $current_user['first_name'] .
+                    ' ' .
+                    $current_user['last_name'] ?>
             </span>
 
-            <span class="userinfo__role"> <?= $user['role'] ?> </span>
+            <span class="userinfo__role"> <?= $current_user['role'] ?> </span>
         </div>
     </header>
 
@@ -58,6 +57,59 @@ exit();
     </div>
 
     <main class="main">
+
+        <div class="card-surface">
+
+
+
+        <form action="void(0)">
+            <?php App\Core\Security::csrfField(); ?>
+
+            <div class="dialog__content dialog__content--grid">
+
+                <div class="form__field">
+
+
+
+                    <label for="first_name">First Name</label>
+
+
+                    <button class="btn icon-only">
+                        <span class="icon icon--lock"></span>
+                    </button>
+
+
+
+                    <input disabled type="text" name="first_name" id="first_name" value=<?= htmlspecialchars(
+                        $user->first_name,
+                        ENT_QUOTES,
+                    ) ?>>
+                </div>
+
+                <div class="form__field">
+                    <label for="last_name">First Name</label>
+                    <input disabled type="text" name="first_name" id="last_name" value=<?= htmlspecialchars(
+                        $user->last_name,
+                        ENT_QUOTES,
+                    ) ?>>
+                </div>
+
+                <div class="form__field">
+                    <label for="first_name">Role</label>
+                    <input disabled type="text" name="first_name" id="first_name" value=<?= $user->last_name ?>>
+                    <select name="role" id="role">
+                        <option value="admin"><?= $user->role ?></option>
+                        <option value="viewer">User</option>
+                        <option value="viewer">Viewer</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+
+
+            </div>
+        </form>
+        </div>
 
 
     </main>
