@@ -61,27 +61,13 @@
         <div class="card-surface">
 
 
-
         <form action="void(0)">
             <?php App\Core\Security::csrfField(); ?>
 
             <div class="dialog__content dialog__content--grid">
 
                 <div class="form__field">
-
-
-
-                    <label for="first_name">First Name</label>
-
-
-
-                    <button class="btn btn--icon">
-                        <span class="icon icon--lock"></span>
-                    </button>
-
-
-
-
+                    <label for="first_name">First Name <button data-form-lock type="button" class="btn btn--icon"><span class="icon icon--lock"></span></button></label>
                     <input disabled type="text" name="first_name" id="first_name" value=<?= htmlspecialchars(
                         $user->first_name,
                         ENT_QUOTES,
@@ -89,7 +75,7 @@
                 </div>
 
                 <div class="form__field">
-                    <label for="last_name">First Name</label>
+                    <label for="last_name">Last Name <button data-form-lock type="button" class="btn btn--icon"><span class="icon icon--lock"></span></button></label>
                     <input disabled type="text" name="first_name" id="last_name" value=<?= htmlspecialchars(
                         $user->last_name,
                         ENT_QUOTES,
@@ -97,14 +83,16 @@
                 </div>
 
                 <div class="form__field">
-                    <label for="first_name">Role</label>
-                    <input disabled type="text" name="first_name" id="first_name" value=<?= $user->last_name ?>>
-                    <select name="role" id="role">
-                        <option value="admin"><?= $user->role ?></option>
-                        <option value="viewer">User</option>
+                    <label for="first_name">Role (admin, user, viewer, inactive) <button data-form-lock type="button" class="btn btn--icon"><span class="icon icon--lock"></span></button></label>
+                    <input disabled type="text" name="role" id="role" list="allow-roles" value=<?= ucfirst(
+                        htmlspecialchars($user->role, ENT_QUOTES),
+                    ) ?>>
+                    <datalist id="allow-roles">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
                         <option value="viewer">Viewer</option>
                         <option value="inactive">Inactive</option>
-                    </select>
+                    </datalist>
                 </div>
 
 
